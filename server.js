@@ -11,8 +11,10 @@ dotenv.config({ path: configPath });
 // створення сервера
 const app = express();
 
-connectDb();
+// set routes
+app.use("/api/v1", require("./routes/recipesRoutes"));
 
+connectDb();
 // отримуємо порт і запускаємо сервер
 const { PORT } = process.env;
 app.listen(PORT, () => {
@@ -20,5 +22,3 @@ app.listen(PORT, () => {
     `server is running on port: , ${process.env.PORT}`.white.bgCyan.bold
   );
 });
-
-// test
