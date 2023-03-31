@@ -33,11 +33,6 @@ app.use("*", (req, res, next) => {
 });
 
 // відловлювач всіх не передбачених помилок
-// app.use((err, req, res, next) => {
-//   const { status = 500, message = "Server error" } = err;
-//   res.status(status).json({ message: message });
-// });
-
 app.use((error, req, res, next) => {
   const statusCode = res.statusCode || 500;
   res.status(statusCode).json({ code: res.statusCode, message: error.message });
