@@ -1,13 +1,19 @@
 //http://localhost:5000/api/v1/auth
 const express = require("express");
+const { schemas } = require("../models/user");
+
+const { register, login } = require("../controllers");
 
 const authRouter = express.Router();
 
-// Registration  (signup)
-// створити ендпоінтт реєстрації користувача
+const validateBody = require("../middlewars/validateBody");
 
-// LogIn     (signin)
-// створити ендпоінт логінізації користувача
+// Registration  (signup)
+// validateBody(schemas.registerSchema),
+authRouter.post("/register", validateBody(schemas.registerSchema), register);
+
+// LogIn (signin)
+authRouter.post("/login", validateBody(schemas.loginSchema), login);
 
 // 🟨Написати прошарок авторизації  (хз що це)
 
