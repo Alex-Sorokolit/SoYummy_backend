@@ -5,33 +5,21 @@ const asyncHandler = require("express-async-handler"); // дозволяє ві�
 const recipesRouter = express.Router();
 
 // Get category-list /recipes/category-list
-// створити ендпоінт для отримання списку категорій.
-// Cписок категорій 'Beef', 'Breakfast', 'Chicken', 'Dessert', 'Goat', 'Lamb', 'Miscellaneous', 'Pasta', 'Pork', 'Seafood', 'Side', 'Starter', 'Vegan', 'Vegetarian' Відсортували по алфавіту
-recipesRouter.get(
-  "/recipes/category-list",
-  asyncHandler(recipesController.getCattegory)
-);
+recipesRouter.get("/recipes/category-list", recipesController.getCattegory);
 
 // Get main-page recipes by category /recipes/main-page
 // створити ендпоінт для отримання рецептів по категоріям для головної сторінки
-recipesRouter.get(
-  "/recipes/main-page",
-  (req, res, next) => {
-    console.log("спрацював joi");
-    next();
-  },
-  asyncHandler(recipesController.getForMain)
-);
+recipesRouter.get("/recipes/main-page", recipesController.getForMain);
 
 // Get 8 recipes by category  /recipes/category:category
 //  створити ендпоінт для отримання рецептів по категоріям по 8 рецептів.
 recipesRouter.get(
   "/recipes/category:category",
-  asyncHandler(recipesController.getForCategory)
+  recipesController.getForCategory
 );
 
 // Get recipe by ID /recipes/:id
 // /recipes/:id - створити ендпоінт для отримання одного рецепта по id
-recipesRouter.get("/recipes/:id", asyncHandler(recipesController.getOne));
+recipesRouter.get("/recipes/:id", recipesController.getOne);
 
 module.exports = recipesRouter;
