@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "cross-env nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -24,8 +25,10 @@
   "dependencies": {
     "colors": "^1.4.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
     "mongoose": "^7.0.3"
   },
   "engines": {
