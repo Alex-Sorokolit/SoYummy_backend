@@ -3,8 +3,9 @@ const cors = require("cors");
 const path = require("path");
 const dotenv = require("dotenv");
 const connectDb = require("./config/db");
+const authRouter = require("./routes/authRoutes");
 require("colors");
-
+require("dotenv").config();
 // отримуємо шлях до файлу .env
 const configPath = path.join(__dirname, "config", ".env");
 dotenv.config({ path: configPath });
@@ -21,6 +22,7 @@ app.use(cors());
 
 // set routes ________________________________
 app.use("/api/v1", require("./routes/recipesRoutes"));
+app.use("/api/v1/auth", authRouter);
 
 // Catch Errors ______________________________
 // обробка помилки 404
