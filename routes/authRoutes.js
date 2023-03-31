@@ -6,7 +6,7 @@ const { register, login } = require("../controllers");
 
 const authRouter = express.Router();
 
-const validateBody = require("../middlewars/validateBody");
+const validateBody = require("../middlewares/validateBody");
 
 // Registration  (signup)
 // validateBody(schemas.registerSchema),

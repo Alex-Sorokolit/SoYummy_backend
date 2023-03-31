@@ -1,5 +1,6 @@
 const Recipe = require("../models/recipeModels");
 const categories = require("../data/categories");
+const asyncHandler = require("express-async-handler"); // дозволяє відловлювати помилки (модний try catch)
 
 class RecipesController {
   async getCattegory(req, res) {
@@ -41,7 +42,14 @@ class RecipesController {
     res.send("get One recipe");
   }
 }
-module.exports = new RecipesController();
+const recipeCtrl = new RecipesController();
+
+module.exports = {
+  getCattegory: asyncHandler(recipeCtrl.getCattegory),
+  getForMain: asyncHandler(recipeCtrl.getForMain),
+  getForCategory: asyncHandler(recipeCtrl.getForCategory),
+  getOne: asyncHandler(recipeCtrl.getOne),
+};
 
 /* 
 show dbs показує список баз даних
@@ -80,7 +88,7 @@ find({rating: null}) покаже документи в яких (не пуст�
 find().skip(5) поверне всі фільми крім перших 5
 
 db.movies.distinct('year')  поверне масив унікальних значень року
-✅ db.movies.distinct('genres') поверне масив унікальних значень жанрів
+db.movies.distinct('genres') поверне масив унікальних значень жанрів
 
 find({}, {genres: {$slice: 1}}) поверне фільми в яких в полі жанр буде тільки под одному (першому) жанру
 find({}, {genres: {$slice: -1}}) поверне фільми в яких в полі жанр буде тільки под одному (останньому) жанру
