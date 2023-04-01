@@ -14,7 +14,7 @@ recipesRouter.get("/recipes/main-page", recipesController.getForMain);
 // Get 8 recipes by category  /recipes/category:category
 //  створити ендпоінт для отримання рецептів по категоріям по 8 рецептів.
 recipesRouter.get(
-  "/recipes/category:category",
+  "/recipes/category/:category",
   recipesController.getForCategory
 );
 
