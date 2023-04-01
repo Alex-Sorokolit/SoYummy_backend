@@ -40,7 +40,9 @@ class RecipesController {
       throw new Error(`Category ${category} not found`);
     }
 
-    const result = await Recipe.find({ category: `${category}` });
+    const result = await Recipe.find({ category: `${category}` }).sort({
+      createdAt: -1,
+    });
 
     if (!result) {
       res.status(404);
@@ -55,7 +57,19 @@ class RecipesController {
   }
 
   async getOne(req, res) {
-    res.send("get One recipe");
+    const { id } = req.params;
+    const result = await Recipe.findById(id);
+
+    if (!result) {
+      res.status(404);
+      throw new Error(`Recipe with id=${id} not found`);
+    }
+    res.status(200).json({
+      code: 200,
+      message: "success",
+      data: result,
+      quantity: result.length,
+    });
   }
 }
 const recipeCtrl = new RecipesController();
@@ -69,7 +83,10 @@ module.exports = {
 
 /* 
 show dbs показує список баз даних
-use db_soyummy  використовувати базу даних db_soyummy
+use db_soyummy  використовувати базу даних db_soyummy 
+після цієї команди можна звертитись до бази як db.recipes.find()
+
+
 show collections показує списо колекцій
 
 
@@ -111,7 +128,7 @@ find({}, {genres: {$slice: -1}}) поверне фільми в яких в по
 
 db.movies.drop() видаляє колекцію
 
-.aggregate([
+✅.aggregate([
       { $sort: { category: 1 } },
       { $group: { _id: "$category", documents: { $push: "$$ROOT" } } },
       { $project: { documents: { $slice: ["$documents", 4] } } },
