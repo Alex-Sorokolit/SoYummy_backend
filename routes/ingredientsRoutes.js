@@ -1,4 +1,5 @@
 //http://localhost:5000/api/v1/ingredients
+const ingredientsController = require("../controllers/IngredientsController");
 
 const express = require("express");
 
