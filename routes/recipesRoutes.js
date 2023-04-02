@@ -21,4 +21,5 @@ recipesRouter.get(
 // /recipes/:id - створити ендпоінт для отримання одного рецепта по id
 recipesRouter.get("/recipes/:id", recipesController.getOne);
 
+recipesRouter.get("/", recipesController.search);
 module.exports = recipesRouter;

@@ -71,6 +71,26 @@ class RecipesController {
       quantity: result.length,
     });
   }
+
+  async search(req, res) {
+    // всі параметри пошуку
+    console.log(req.query);
+
+    // дай мені page сторінку якщо на сторінці limit об'єктів
+    const { title = "", page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+
+    const result = await Recipe.find(title, {
+      skip,
+      limit,
+    });
+    res.code(200).json({
+      code: 200,
+      message: "success",
+      data: result,
+      quantity: result.length,
+    });
+  }
 }
 const recipeCtrl = new RecipesController();
 
@@ -79,6 +99,7 @@ module.exports = {
   getForMain: asyncHandler(recipeCtrl.getForMain),
   getForCategory: asyncHandler(recipeCtrl.getForCategory),
   getOne: asyncHandler(recipeCtrl.getOne),
+  search: asyncHandler(recipeCtrl.search),
 };
 
 /* 
