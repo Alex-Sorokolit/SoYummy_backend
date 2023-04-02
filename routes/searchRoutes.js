@@ -5,5 +5,5 @@ const searchRouter = express.Router();
 
 // Search by title
 // створити ендпоінт для пошуку рецептів по ключовому слову в заголовку, або по інгрідієнту з данними для реалізації пагінації у відповіді
-recipesRouter.get("/search", find);
+searchRouter.get("/search", find);
 module.exports = searchRouter;

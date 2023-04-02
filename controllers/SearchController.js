@@ -40,7 +40,7 @@ class SearchController {
   }
 }
 
-const searchCtrl = new RecipesController();
+const searchCtrl = new SearchController();
 
 module.exports = {
   find: asyncHandler(searchCtrl.find),
