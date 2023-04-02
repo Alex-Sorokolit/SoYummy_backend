@@ -2,11 +2,11 @@
 const express = require("express");
 const { schemas } = require("../models/user");
 
-const { register, login } = require("../controllers");
+const { register, login, getCurrent, logout } = require("../controllers");
 
 const authRouter = express.Router();
 
-const validateBody = require("../middlewares/validateBody");
+const { validateBody, authenticate } = require("../middlewares");
 
 // Registration  (signup)
 // validateBody(schemas.registerSchema),
@@ -14,6 +14,9 @@ authRouter.post("/register", validateBody(schemas.registerSchema), register);
 
 // LogIn (signin)
 authRouter.post("/login", validateBody(schemas.loginSchema), login);
+
+// Get current user
+authRouter.get("/current", authenticate, getCurrent);
 
 // 🟨Написати прошарок авторизації  (хз що це)
 
@@ -24,6 +27,6 @@ authRouter.post("/login", validateBody(schemas.loginSchema), login);
 // створити ендпоінт для оновлення данних користувача або одного з полів контактної інформації про користувача
 
 // LogOut
-// створити ендпоінт для логаута користувача
+authRouter.post("/logout", authenticate, logout);
 
 module.exports = authRouter;

@@ -67,6 +67,22 @@ class AuthController {
       },
     });
   }
+
+  async getCurrent(req, res) {
+    const { email } = req.user;
+
+    res.json({ email });
+  }
+
+  async logout(req, res) {
+    const { _id } = req.user;
+
+    await User.findByIdAndUpdate(_id, { token: "" });
+
+    res.json({
+      message: "Logout success",
+    });
+  }
 }
 
 const authCtrl = new AuthController();
@@ -74,4 +90,6 @@ const authCtrl = new AuthController();
 module.exports = {
   register: ctrlWrapper(authCtrl.register),
   login: ctrlWrapper(authCtrl.login),
+  getCurrent: ctrlWrapper(authCtrl.getCurrent),
+  logout: ctrlWrapper(authCtrl.logout),
 };
