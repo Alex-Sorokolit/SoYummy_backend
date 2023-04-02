@@ -13,8 +13,6 @@ class RecipesController {
   }
 
   async getForMain(req, res) {
-    console.log("get for main");
-
     const result = await Recipe.aggregate([
       { $sort: { category: 1 } },
       { $group: { _id: "$category", documents: { $push: "$$ROOT" } } },
@@ -77,11 +75,25 @@ class RecipesController {
     console.log(req.query);
 
     // дай мені page сторінку якщо на сторінці limit об'єктів
-    const { title = "", page = 1, limit = 20 } = req.query;
+    const { type = "Title", query = "", page = 1, limit = 20 } = req.query;
     const skip = (page - 1) * limit;
 
+    if (type === "Ingredients") {
+      const result = await Recipe.find({
+        title: { $regex: new RegExp(query, "i") },
+      })
+        .skip(skip)
+        .limit(limit);
+      res.status(200).json({
+        code: 200,
+        message: "success",
+        data: result,
+        quantity: result.length,
+      });
+    }
+
     const result = await Recipe.find({
-      title: { $regex: new RegExp(title, "i") },
+      title: { $regex: new RegExp(query, "i") },
     })
       .skip(skip)
       .limit(limit);

@@ -5,5 +5,5 @@ const favoriteRouter = express.Router();
 
 // Search by title
 // створити ендпоінт для пошуку рецептів по ключовому слову в заголовку, або по інгрідієнту з данними для реалізації пагінації у відповіді
-
+recipesRouter.get("/", recipesController.search);
 module.exports = favoriteRouter;
