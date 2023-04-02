@@ -2,7 +2,14 @@
 const express = require("express");
 const { schemas } = require("../models/user");
 
-const { register, login, getCurrent, logout } = require("../controllers");
+const {
+  register,
+  login,
+  getCurrent,
+  logout,
+  getCurrentUser,
+  updateUser,
+} = require("../controllers");
 
 const authRouter = express.Router();
 
@@ -21,10 +28,15 @@ authRouter.get("/current", authenticate, getCurrent);
 // 🟨Написати прошарок авторизації  (хз що це)
 
 // Get info about user
-// створити ендпоінт на отримання інформації про користувача
+authRouter.get("/current/user", authenticate, getCurrentUser);
 
 // Refresh
-// створити ендпоінт для оновлення данних користувача або одного з полів контактної інформації про користувача
+authRouter.put(
+  "/user/update",
+  authenticate,
+  validateBody(schemas.updateUserSchema),
+  updateUser
+);
 
 // LogOut
 authRouter.post("/logout", authenticate, logout);

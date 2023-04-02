@@ -9,6 +9,7 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
+      required: [true, "Set name for user"],
     },
     password: {
       type: String,
@@ -37,20 +38,48 @@ userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().pattern(emailRegexp).required().messages({
-    "string.pattern.base": `"email" should be example@mail.com`,
-  }),
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .email({
+      minDomainSegments: 1,
+      tlds: { allow: ["com", "net", "ua"] },
+    })
+    .required()
+    .messages({
+      "string.pattern.base": `"email" should be example@mail.com`,
+    }),
   password: Joi.string().min(6).required(),
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .email({
+      minDomainSegments: 1,
+      tlds: { allow: ["com", "net", "ua"] },
+    })
+    .required(),
   password: Joi.string().min(6).required(),
+});
+
+const updateUserSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .email({
+      minDomainSegments: 1,
+      tlds: { allow: ["com", "net", "ua"] },
+    })
+    .messages({
+      "string.pattern.base": `"email" should be example@mail.com`,
+    }),
+  password: Joi.string().min(6),
 });
 
 const schemas = {
   registerSchema,
   loginSchema,
+  updateUserSchema,
 };
 
 const User = model("user", userSchema);

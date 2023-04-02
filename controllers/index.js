@@ -5,4 +5,6 @@ module.exports = {
   login: controllers.login,
   getCurrent: controllers.getCurrent,
   logout: controllers.logout,
+  getCurrentUser: controllers.getCurrentUser,
+  updateUser: controllers.updateUser,
 };
