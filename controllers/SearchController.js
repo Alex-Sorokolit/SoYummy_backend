@@ -13,8 +13,8 @@ class SearchController {
     const skip = (page - 1) * limit;
 
     if (type === "Ingredients") {
-      const result = await Recipe.find({
-        title: { $regex: new RegExp(query, "i") },
+      const result = await Ingredients.find({
+        ttl: { $regex: new RegExp(query, "i") },
       })
         .skip(skip)
         .limit(limit);
