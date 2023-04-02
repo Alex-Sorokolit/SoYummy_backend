@@ -9,14 +9,14 @@ const {
   logout,
   getCurrentUser,
   updateUser,
+  updateAvatar,
 } = require("../controllers");
 
 const authRouter = express.Router();
 
-const { validateBody, authenticate } = require("../middlewares");
+const { validateBody, authenticate, upload } = require("../middlewares");
 
 // Registration  (signup)
-// validateBody(schemas.registerSchema),
 authRouter.post("/register", validateBody(schemas.registerSchema), register);
 
 // LogIn (signin)
@@ -25,12 +25,10 @@ authRouter.post("/login", validateBody(schemas.loginSchema), login);
 // Get current user
 authRouter.get("/current", authenticate, getCurrent);
 
-// 🟨Написати прошарок авторизації  (хз що це)
-
 // Get info about user
-authRouter.get("/current/user", authenticate, getCurrentUser);
+authRouter.get("/user/info", authenticate, getCurrentUser);
 
-// Refresh
+// Update user fields
 authRouter.put(
   "/user/update",
   authenticate,
@@ -40,5 +38,13 @@ authRouter.put(
 
 // LogOut
 authRouter.post("/logout", authenticate, logout);
+
+// Update users avatar
+authRouter.patch(
+  "/user/avatar",
+  authenticate,
+  upload.single("avatar"),
+  updateAvatar
+);
 
 module.exports = authRouter;
