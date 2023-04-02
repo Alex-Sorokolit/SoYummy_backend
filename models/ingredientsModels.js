@@ -8,11 +8,9 @@ const ingredientSchema = Schema(
     },
     desc: {
       type: String,
-      required: [true, "db: desc is required"],
     },
     t: {
       type: String,
-      required: [true, "db: t is required"],
     },
     tnd: {
       type: String,

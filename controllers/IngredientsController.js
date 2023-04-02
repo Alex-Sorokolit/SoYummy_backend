@@ -4,16 +4,18 @@ const asyncHandler = require("express-async-handler");
 
 class IngredientsController {
   async getIngredientsList(req, res) {
+    console.log(req.params);
+    const result = await Ingredient.find();
+    if (!result) {
+      res.status(400);
+      throw new Error("Bad Request");
+    }
     res.status(200).json({
       code: 200,
       message: "success",
-      data: Ingredient,
-      quantity: Ingredient.length,
+      data: result,
+      quantity: result.length,
     });
-  }
-  async getIngredients(req, res) {
-    const { ingredient } = req.params;
-    console.log(ingredient);
   }
 }
 
@@ -21,6 +23,6 @@ const ingredientCtrl = new IngredientsController();
 
 module.exports = {
   getIngredientsList: asyncHandler(
-    ingredientCtrl.getIngredients
+    ingredientCtrl.getIngredientsList
   ),
 };
