@@ -57,13 +57,10 @@ class AuthController {
 
     await User.findByIdAndUpdate(user._id, { token });
 
-    const { subscription } = user;
-
     res.json({
       token,
       user: {
         email,
-        subscription,
       },
     });
   }
@@ -83,6 +80,44 @@ class AuthController {
       message: "Logout success",
     });
   }
+
+  async getCurrentUser(req, res) {
+    const { name, email, avatarURL, createdAt } = req.user;
+
+    res.status(200).json({
+      name,
+      email,
+      avatarURL,
+      createdAt,
+    });
+  }
+
+  async updateUser(req, res) {
+    const { _id: id } = req.user;
+
+    const data = req.body;
+
+    if (data.password) {
+      const hashPassword = await bcrypt.hash(data.password, 10);
+
+      await User.findByIdAndUpdate(id, { password: hashPassword });
+
+      res.status(200).json({
+        message: "Password update",
+      });
+      return;
+    }
+
+    const { name, email, avatarURL, updatedAt } = await User.findByIdAndUpdate(
+      id,
+      data,
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json({ name, email, avatarURL, updatedAt });
+  }
 }
 
 const authCtrl = new AuthController();
@@ -92,4 +127,6 @@ module.exports = {
   login: ctrlWrapper(authCtrl.login),
   getCurrent: ctrlWrapper(authCtrl.getCurrent),
   logout: ctrlWrapper(authCtrl.logout),
+  getCurrentUser: ctrlWrapper(authCtrl.getCurrentUser),
+  updateUser: ctrlWrapper(authCtrl.updateUser),
 };
