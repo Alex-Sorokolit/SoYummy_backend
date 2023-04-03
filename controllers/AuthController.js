@@ -20,21 +20,35 @@ class AuthController {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-
     const avatarURL = gravatar.url(email);
 
-    const newUser = await User.create({
+    await User.create({
       ...req.body,
       password: hashPassword,
-      token,
       avatarURL,
     });
+
+    const { _id } = await User.findOne({ email });
+
+    const payload = {
+      id: _id,
+    };
+
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+
+    const newUser = await User.findByIdAndUpdate(
+      _id,
+      { token },
+      {
+        new: true,
+      }
+    );
 
     res.status(201).json({
       name: newUser.name,
       email: newUser.email,
       token: newUser.token,
+      avatarURL: newUser.avatarURL,
     });
   }
 
@@ -47,10 +61,7 @@ class AuthController {
       throw HttpError(401, "Email or password invalid");
     }
 
-    const passwordCompare = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const passwordCompare = await bcrypt.compare(password, user.password);
 
     if (!passwordCompare) {
       throw HttpError(401, "Email or password invalid");
@@ -60,13 +71,9 @@ class AuthController {
       id: user._id,
     };
 
-    const token = jwt.sign(
-      payload,
-      process.env.SECRET_KEY,
-      {
-        expiresIn: "23h",
-      }
-    );
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+      expiresIn: "23h",
+    });
 
     await User.findByIdAndUpdate(user._id, { token });
 
@@ -111,10 +118,7 @@ class AuthController {
     const data = req.body;
 
     if (data.password) {
-      const hashPassword = await bcrypt.hash(
-        data.password,
-        10
-      );
+      const hashPassword = await bcrypt.hash(data.password, 10);
 
       await User.findByIdAndUpdate(id, {
         password: hashPassword,
@@ -126,14 +130,15 @@ class AuthController {
       return;
     }
 
-    const { name, email, avatarURL, updatedAt } =
-      await User.findByIdAndUpdate(id, data, {
+    const { name, email, avatarURL, updatedAt } = await User.findByIdAndUpdate(
+      id,
+      data,
+      {
         new: true,
-      });
+      }
+    );
 
-    res
-      .status(200)
-      .json({ name, email, avatarURL, updatedAt });
+    res.status(200).json({ name, email, avatarURL, updatedAt });
   }
 
   async updateAvatar(req, res) {
