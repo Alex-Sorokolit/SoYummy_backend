@@ -27,7 +27,7 @@ app.use(cors());
 // set routes ________________________________
 app.use("/api/v1", recipesRouter);
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/ingrediets", ingredientsRouter);
+app.use("/api/v1/ingredients", ingredientsRouter);
 app.use("/api/v1", searchRouter);
 // Catch Errors ______________________________
 // обробка помилки 404
