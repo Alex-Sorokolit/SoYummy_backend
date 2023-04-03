@@ -1,10 +1,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-const fs = require("fs");
 require("dotenv").config();
 const { User } = require("../models/user");
-const cloudinary = require("../config/cloudinary");
 
 const { ctrlWrapper, HttpError } = require("../helpers");
 
@@ -22,17 +20,21 @@ class AuthController {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+
     const avatarURL = gravatar.url(email);
 
     const newUser = await User.create({
       ...req.body,
       password: hashPassword,
+      token,
       avatarURL,
     });
 
     res.status(201).json({
       name: newUser.name,
       email: newUser.email,
+      token: newUser.token,
     });
   }
 
