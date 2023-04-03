@@ -5,7 +5,10 @@ const shoppintListRouter = express.Router();
 
 // Add product to cart
 //  створити ендпоінт для додавання продукту в список покупок користувача
-
+shoppintListRouter.post(
+  "/shopping-list",
+  shoppingListController.addShoppingList
+);
 // Remove product from cart
 // створити ендпоінт для видалення продукту зі списку покупок користувача
 
