@@ -32,12 +32,9 @@ app.use("/api/v1", recipesRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/ingredients", ingredientsRouter);
 app.use("/api/v1", searchRouter);
-<<<<<<< HEAD
-// app.use("./api/v1", ownRecipesRouter);
-=======
 app.use("/api/v1", favoritesRouter);
+// app.use("./api/v1", ownRecipesRouter);
 
->>>>>>> main
 // Catch Errors ______________________________
 // обробка помилки 404
 
@@ -51,9 +48,7 @@ app.use("*", (req, res, next) => {
 // відловлювач всіх не передбачених помилок
 app.use((error, req, res, next) => {
   const statusCode = res.statusCode || 500;
-  res
-    .status(statusCode)
-    .json({ code: res.statusCode, message: error.message });
+  res.status(statusCode).json({ code: res.statusCode, message: error.message });
 });
 
 // Підключаємось до бази даних
@@ -62,7 +57,6 @@ connectDb();
 const { PORT = 5000 } = process.env;
 app.listen(PORT, () => {
   console.log(
-    `server is running on port: , ${process.env.PORT}`.white
-      .bgCyan.bold
+    `server is running on port: , ${process.env.PORT}`.white.bgCyan.bold
   );
 });
