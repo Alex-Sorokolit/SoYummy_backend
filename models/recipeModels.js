@@ -34,10 +34,20 @@ const recipeSchema = Schema(
       type: Number,
       required: [true, "db: time is required"],
     },
-    ingredients: {
-      type: Array,
-      default: [],
-    },
+
+    ingredients: [
+      {
+        id: {
+          type: Schema.Types.ObjectId,
+          ref: "Ingredient",
+          required: true,
+        },
+        measure: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     instructions: {
       type: String,
       required: [true, "db: instruction is required"],
@@ -46,11 +56,10 @@ const recipeSchema = Schema(
     },
     favorites: {
       type: Array,
-      default: [],
+      derault: [],
     },
-    // owner,
   },
   { versionKey: false, timestamps: true }
 );
 
-module.exports = model("Recipe", recipeSchema);
+module.exports = model("recipe", recipeSchema);

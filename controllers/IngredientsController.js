@@ -4,10 +4,13 @@ const asyncHandler = require("express-async-handler");
 
 class IngredientsController {
   async getIngredientsList(req, res) {
-    // console.log(req.params);
     const { recipeid } = req.params;
 
-    const result = await Recipe.findById(recipeid).populate("ingredients");
+    const result = await Recipe.findById(recipeid).populate({
+      path: "ingredients._id",
+      model: "Ingredient",
+    });
+
     if (!result) {
       res.status(400);
       throw new Error("Bad Request");
@@ -15,8 +18,7 @@ class IngredientsController {
     res.status(200).json({
       code: 200,
       message: "success",
-      data: result.ingredients,
-      quantity: result.ingredients.length,
+      data: result,
     });
   }
 }
