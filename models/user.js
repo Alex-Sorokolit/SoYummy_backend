@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const { Recipe } = require("../models/recipeModels");
 const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
@@ -82,15 +83,9 @@ const updateUserSchema = Joi.object({
 });
 
 const updateFavoritesSchema = Joi.object({
-  favorites: Joi.array().items(
-    Joi.object({
-      title: Joi.string(),
-      instructions: Joi.string(),
-      thumb: Joi.string(),
-      time: Joi.string(),
-      popularity: Joi.number(),
-    })
-  ),
+  favorites: Joi.object({
+    recipe: Joi.object(),
+  }),
 });
 
 const schemas = {

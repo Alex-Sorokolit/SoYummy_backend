@@ -23,7 +23,7 @@ favoritesRouter.get(
 // remove from favorites
 // створити ендпоінт для видалення рецептів авторизованого користувача доданих цим же до обраних
 favoritesRouter.delete(
-  "/favorites",
+  "/favorites/:id",
   authenticate,
   favoritesController.deleteFavorites
 );

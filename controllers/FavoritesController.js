@@ -7,9 +7,8 @@ class FavoritesController {
   async addFavorites(req, res) {
     const { _id: userId } = req.user;
     const { _id: recipeId } = req.body;
-
-    const recipes = await Recipe.findById(recipeId);
-    if (!recipes) {
+    const recipe = await Recipe.findById(recipeId);
+    if (!recipe) {
       return res.status(404).json({
         code: 404,
         message: "Recipe not found",
@@ -20,39 +19,59 @@ class FavoritesController {
       userId,
       { $addToSet: { favorites: recipeId } },
       { new: true }
-    );
+    ).populate("favorites");
 
     res.status(201).json({
       code: 201,
       message: "success",
-      data: updatedUser,
+      data: updatedUser.favorites,
     });
   }
   async getFavorites(req, res) {
-    const { _id: id } = req.user;
-    const favorites = await User.findById(id, {
-      favorites: 1,
+    const { _id: userId } = req.user;
+    const { id } = req.params;
+    // const recipe = await Recipe.findById(id);
+
+    const user = await User.findById(userId).populate({
+      path: "favorites",
+      model: "Recipe",
     });
 
-    if (!favorites) {
+    const favoriteRecipes = user.favorites;
+
+    if (!favoriteRecipes) {
       res.json({
         message: "No favorites have been added yet",
       });
     }
+
     res.status(200).json({
       code: 200,
       message: "success",
-      data: favorites,
+      data: favoriteRecipes,
+      quantity: favoriteRecipes.length,
     });
   }
+
   async deleteFavorites(req, res) {
-    const { id } = req.favorites;
-    console.log("id", id);
-    // const fivorites = await Recipe.findByIdAndRemove(id);
-    // if (!fivorites) {
-    //   throw HttpError(404, "Not found");
-    // }
-    // res.json({ message: "Fivorites deleted" });
+    const { _id: userId } = req.user;
+    const { id: recipeId } = req.params;
+    console.log("recipeId", recipeId);
+    const updateUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { favorites: recipeId } },
+      { new: true }
+    ).populate("favorites");
+    if (!recipeId) {
+      res.json({
+        message: "There is no such recipe here anymore",
+      });
+    }
+    res.status(200).json({
+      code: 200,
+      message: "Fivorites deleted",
+      data: updateUser.favorites,
+    });
   }
 }
 
