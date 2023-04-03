@@ -1,15 +1,12 @@
 const Ingredient = require("../models/ingredientsModels");
-const Recipe = require("../models/recipeModels");
 const asyncHandler = require("express-async-handler");
 
 class IngredientsController {
   async getIngredientsList(req, res) {
-    const { recipeid } = req.params;
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
 
-    const result = await Recipe.findById(recipeid).populate({
-      path: "ingredients._id",
-      model: "Ingredient",
-    });
+    const result = await Ingredient.find().skip(skip).limit(limit);
 
     if (!result) {
       res.status(400);
@@ -19,6 +16,7 @@ class IngredientsController {
       code: 200,
       message: "success",
       data: result,
+      quantity: result.length,
     });
   }
 }
