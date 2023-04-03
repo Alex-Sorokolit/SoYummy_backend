@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+const fs = require("fs");
 require("dotenv").config();
 const { User } = require("../models/user");
+const cloudinary = require("../config/cloudinary");
 
 const { ctrlWrapper, HttpError } = require("../helpers");
 
@@ -131,6 +133,16 @@ class AuthController {
       .status(200)
       .json({ name, email, avatarURL, updatedAt });
   }
+
+  async updateAvatar(req, res) {
+    const { _id: id } = req.user;
+
+    const { path } = req.file;
+
+    await User.findByIdAndUpdate(id, { avatarURL: path });
+
+    res.status(200).json({ avatarURL: path });
+  }
 }
 
 const authCtrl = new AuthController();
@@ -142,4 +154,5 @@ module.exports = {
   logout: ctrlWrapper(authCtrl.logout),
   getCurrentUser: ctrlWrapper(authCtrl.getCurrentUser),
   updateUser: ctrlWrapper(authCtrl.updateUser),
+  updateAvatar: ctrlWrapper(authCtrl.updateAvatar),
 };

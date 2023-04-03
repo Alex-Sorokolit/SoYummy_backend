@@ -41,6 +41,8 @@ const recipeSchema = Schema(
     instructions: {
       type: String,
       required: [true, "db: instruction is required"],
+      minlength: 2,
+      maxlength: 2000,
     },
     favorites: {
       type: Array,

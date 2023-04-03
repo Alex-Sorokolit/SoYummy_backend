@@ -1,11 +1,15 @@
 const Ingredient = require("../models/ingredientsModels");
 const Recipe = require("../models/recipeModels");
-
 const asyncHandler = require("express-async-handler");
 
 class IngredientsController {
   async getIngredientsList(req, res) {
-    const result = await Ingredient.find();
+    // console.log(req.params);
+    const { recipeid } = req.params;
+
+    const result = await Recipe.findById(recipeid).populate(
+      "ingredients"
+    );
     if (!result) {
       res.status(400);
       throw new Error("Bad Request");
@@ -13,8 +17,8 @@ class IngredientsController {
     res.status(200).json({
       code: 200,
       message: "success",
-      data: result,
-      quantity: result.length,
+      data: result.ingredients,
+      quantity: result.ingredients.length,
     });
   }
 }

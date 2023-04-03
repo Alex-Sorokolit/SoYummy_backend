@@ -4,7 +4,10 @@ const path = require("path");
 const dotenv = require("dotenv");
 const connectDb = require("./config/db");
 const authRouter = require("./routes/authRoutes");
+const recipesRouter = require("./routes/recipesRoutes");
 const ingredientsRouter = require("./routes/ingredientsRoutes");
+const searchRouter = require("./routes/searchRoutes");
+
 const favoritesRouter = require("./routes/favoritesRoutes");
 
 require("colors");
@@ -24,9 +27,10 @@ app.use(express.json());
 app.use(cors());
 
 // set routes ________________________________
-app.use("/api/v1", require("./routes/recipesRoutes"));
+app.use("/api/v1", recipesRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/ingrediets", ingredientsRouter);
+app.use("/api/v1", searchRouter);
 app.use("/api/v1", favoritesRouter);
 
 // Catch Errors ______________________________

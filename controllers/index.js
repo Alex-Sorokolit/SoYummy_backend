@@ -7,4 +7,5 @@ module.exports = {
   logout: controllers.logout,
   getCurrentUser: controllers.getCurrentUser,
   updateUser: controllers.updateUser,
+  updateAvatar: controllers.updateAvatar,
 };
