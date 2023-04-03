@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 const connectDb = require("./config/db");
 const authRouter = require("./routes/authRoutes");
 const ingredientsRouter = require("./routes/ingredientsRoutes");
+const favoritesRouter = require("./routes/favoritesRoutes");
+
 require("colors");
 require("dotenv").config();
 // отримуємо шлях до файлу .env
@@ -25,6 +27,7 @@ app.use(cors());
 app.use("/api/v1", require("./routes/recipesRoutes"));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/ingrediets", ingredientsRouter);
+app.use("/api/v1", favoritesRouter);
 
 // Catch Errors ______________________________
 // обробка помилки 404

@@ -43,7 +43,10 @@ class AuthController {
       throw HttpError(401, "Email or password invalid");
     }
 
-    const passwordCompare = await bcrypt.compare(password, user.password);
+    const passwordCompare = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!passwordCompare) {
       throw HttpError(401, "Email or password invalid");
@@ -53,7 +56,13 @@ class AuthController {
       id: user._id,
     };
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+    const token = jwt.sign(
+      payload,
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "23h",
+      }
+    );
 
     await User.findByIdAndUpdate(user._id, { token });
 
@@ -98,9 +107,14 @@ class AuthController {
     const data = req.body;
 
     if (data.password) {
-      const hashPassword = await bcrypt.hash(data.password, 10);
+      const hashPassword = await bcrypt.hash(
+        data.password,
+        10
+      );
 
-      await User.findByIdAndUpdate(id, { password: hashPassword });
+      await User.findByIdAndUpdate(id, {
+        password: hashPassword,
+      });
 
       res.status(200).json({
         message: "Password update",
@@ -108,15 +122,14 @@ class AuthController {
       return;
     }
 
-    const { name, email, avatarURL, updatedAt } = await User.findByIdAndUpdate(
-      id,
-      data,
-      {
+    const { name, email, avatarURL, updatedAt } =
+      await User.findByIdAndUpdate(id, data, {
         new: true,
-      }
-    );
+      });
 
-    res.status(200).json({ name, email, avatarURL, updatedAt });
+    res
+      .status(200)
+      .json({ name, email, avatarURL, updatedAt });
   }
 }
 

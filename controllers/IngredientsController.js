@@ -1,10 +1,10 @@
 const Ingredient = require("../models/ingredientsModels");
+const Recipe = require("../models/recipeModels");
 
 const asyncHandler = require("express-async-handler");
 
 class IngredientsController {
   async getIngredientsList(req, res) {
-    console.log(req.params);
     const result = await Ingredient.find();
     if (!result) {
       res.status(400);
