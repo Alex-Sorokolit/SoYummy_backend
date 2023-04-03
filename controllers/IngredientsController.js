@@ -7,7 +7,9 @@ class IngredientsController {
     // console.log(req.params);
     const { recipeid } = req.params;
 
-    const result = await Recipe.findById(recipeid).populate("ingredients");
+    const result = await Recipe.findById(recipeid).populate(
+      "ingredients"
+    );
     if (!result) {
       res.status(400);
       throw new Error("Bad Request");
@@ -24,5 +26,7 @@ class IngredientsController {
 const ingredientCtrl = new IngredientsController();
 
 module.exports = {
-  getIngredientsList: asyncHandler(ingredientCtrl.getIngredientsList),
+  getIngredientsList: asyncHandler(
+    ingredientCtrl.getIngredientsList
+  ),
 };
