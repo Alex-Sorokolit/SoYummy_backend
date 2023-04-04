@@ -1,6 +1,6 @@
 //http://localhost:5000/api/v1/recipes
 const express = require("express");
-const authenticate = require("../middlewares/authenticate");
+const { authenticate, isValidId } = require("../middlewares");
 const {
   getCattegory,
   getForMain,
@@ -22,6 +22,6 @@ recipesRouter.get("/recipes/category/:category", getForCategory);
 
 // Get recipe by ID /recipes/:id
 // /recipes/:id - створити ендпоінт для отримання одного рецепта по id
-recipesRouter.get("/recipes/:id", getOne);
+recipesRouter.get("/recipes/:id", isValidId, getOne);
 
 module.exports = recipesRouter;

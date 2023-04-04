@@ -1,6 +1,21 @@
 const { model, Schema } = require("mongoose");
 const Joi = require("joi");
-
+const categoriesList = [
+  "Beef",
+  "Breakfast",
+  "Chicken",
+  "Dessert",
+  "Goat",
+  "Lamb",
+  "Miscellaneous",
+  "Pasta",
+  "Pork",
+  "Seafood",
+  "Side",
+  "Starter",
+  "Vegan",
+  "Vegetarian",
+];
 // mongoos схема перевіряє дані які зберігаються в базу даних
 const recipeSchema = Schema(
   {
@@ -20,22 +35,7 @@ const recipeSchema = Schema(
     },
     category: {
       type: String,
-      enum: [
-        "Beef",
-        "Breakfast",
-        "Chicken",
-        "Dessert",
-        "Goat",
-        "Lamb",
-        "Miscellaneous",
-        "Pasta",
-        "Pork",
-        "Seafood",
-        "Side",
-        "Starter",
-        "Vegan",
-        "Vegetarian",
-      ],
+      enum: categoriesList,
       // required: [true, "DB: category is required"],
     },
     time: {
@@ -88,22 +88,7 @@ const recipeJoiSchema = Joi.object({
     "string.empty": "Description cannot be empty",
   }),
   category: Joi.string()
-    .valid(
-      "Beef",
-      "Breakfast",
-      "Chicken",
-      "Dessert",
-      "Goat",
-      "Lamb",
-      "Miscellaneous",
-      "Pasta",
-      "Pork",
-      "Seafood",
-      "Side",
-      "Starter",
-      "Vegan",
-      "Vegetarian"
-    )
+    .valid(...categoriesList)
     .required()
     .messages({
       "any.required": "Category is required",
