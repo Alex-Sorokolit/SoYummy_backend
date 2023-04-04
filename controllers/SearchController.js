@@ -1,7 +1,6 @@
-const Recipe = require("../models/recipeModels");
+const { Recipe } = require("../models/recipeModels");
 const Ingredients = require("../models/ingredientsModels");
 const asyncHandler = require("express-async-handler");
-const RecipesController = require("./RecipesController");
 
 class SearchController {
   async find(req, res) {
