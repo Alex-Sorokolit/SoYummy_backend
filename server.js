@@ -33,11 +33,10 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/ingredients", ingredientsRouter);
 app.use("/api/v1", searchRouter);
 app.use("/api/v1", favoritesRouter);
-app.use("./api/v1", ownRecipesRouter);
+app.use("/api/v1", ownRecipesRouter);
 
 // Catch Errors ______________________________
 // обробка помилки 404
-
 app.use("*", (req, res, next) => {
   res.status(404).json({
     code: 404,

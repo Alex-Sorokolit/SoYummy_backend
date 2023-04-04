@@ -6,7 +6,7 @@ const RecipesController = require("./RecipesController");
 class SearchController {
   async find(req, res) {
     // всі параметри пошуку
-    console.log(req.query);
+    // console.log(req.query);
 
     // дай мені page сторінку якщо на сторінці limit об'єктів
     const { type = "Title", query = "", page = 1, limit = 20 } = req.query;

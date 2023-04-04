@@ -1,5 +1,6 @@
 //http://localhost:5000/api/v1/recipes
 const express = require("express");
+const authenticate = require("../middlewares/authenticate");
 const {
   getCattegory,
   getForMain,
