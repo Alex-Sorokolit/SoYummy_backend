@@ -30,6 +30,22 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    favorites: {
+      type: Array,
+      default: [],
+    },
+    subscription: {
+      email: {
+        type: String,
+        match: emailRegexp,
+        unique: true,
+        default: "",
+      },
+      isSubscribe: {
+        type: Boolean,
+        default: false,
+      },
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -76,10 +92,30 @@ const updateUserSchema = Joi.object({
   password: Joi.string().min(6),
 });
 
+const subscriptionSchema = Joi.object({
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .email({
+      minDomainSegments: 1,
+      tlds: { allow: ["com", "net", "ua"] },
+    })
+    .messages({
+      "string.pattern.base": `"email" should be example@mail.com`,
+    }),
+});
+
+const updateFavoritesSchema = Joi.object({
+  favorites: Joi.object({
+    recipe: Joi.object(),
+  }),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
   updateUserSchema,
+  updateFavoritesSchema,
+  subscriptionSchema,
 };
 
 const User = model("user", userSchema);

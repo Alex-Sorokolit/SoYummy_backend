@@ -56,7 +56,10 @@ class RecipesController {
 
   async getOne(req, res) {
     const { id } = req.params;
-    const result = await Recipe.findById(id);
+    const result = await Recipe.findById(id).populate({
+      path: "ingredients._id",
+      model: "Ingredient",
+    });
 
     if (!result) {
       res.status(404);

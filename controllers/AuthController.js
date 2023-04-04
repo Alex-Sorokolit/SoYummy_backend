@@ -1,12 +1,12 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-const fs = require("fs");
 require("dotenv").config();
 const { User } = require("../models/user");
-const cloudinary = require("../config/cloudinary");
 
-const { ctrlWrapper, HttpError } = require("../helpers");
+const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
+
+const subscribeLetter = require("../letters/subscribeLetter");
 
 const { SECRET_KEY } = process.env;
 
@@ -24,15 +24,33 @@ class AuthController {
 
     const avatarURL = gravatar.url(email);
 
-    const newUser = await User.create({
+    await User.create({
       ...req.body,
       password: hashPassword,
       avatarURL,
     });
 
+    const { _id } = await User.findOne({ email });
+
+    const payload = {
+      id: _id,
+    };
+
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+
+    const newUser = await User.findByIdAndUpdate(
+      _id,
+      { token },
+      {
+        new: true,
+      }
+    );
+
     res.status(201).json({
       name: newUser.name,
       email: newUser.email,
+      token: newUser.token,
+      avatarURL: newUser.avatarURL,
     });
   }
 
@@ -55,7 +73,9 @@ class AuthController {
       id: user._id,
     };
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+      expiresIn: "23h",
+    });
 
     await User.findByIdAndUpdate(user._id, { token });
 
@@ -102,7 +122,9 @@ class AuthController {
     if (data.password) {
       const hashPassword = await bcrypt.hash(data.password, 10);
 
-      await User.findByIdAndUpdate(id, { password: hashPassword });
+      await User.findByIdAndUpdate(id, {
+        password: hashPassword,
+      });
 
       res.status(200).json({
         message: "Password update",
@@ -130,6 +152,33 @@ class AuthController {
 
     res.status(200).json({ avatarURL: path });
   }
+
+  async subscription(req, res) {
+    const { _id: id } = req.user;
+    const { email } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        subscription: { email, isSubscribe: true },
+      },
+      {
+        new: true,
+      }
+    );
+
+    const verifyEmail = {
+      to: email,
+      subject: "SoYummy subscription",
+      html: subscribeLetter(),
+    };
+
+    await sendEmail(verifyEmail);
+
+    res.status(200).json({
+      subscriptionEmail: user.subscription.email,
+    });
+  }
 }
 
 const authCtrl = new AuthController();
@@ -142,4 +191,5 @@ module.exports = {
   getCurrentUser: ctrlWrapper(authCtrl.getCurrentUser),
   updateUser: ctrlWrapper(authCtrl.updateUser),
   updateAvatar: ctrlWrapper(authCtrl.updateAvatar),
+  subscription: ctrlWrapper(authCtrl.subscription),
 };

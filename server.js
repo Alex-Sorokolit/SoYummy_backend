@@ -8,6 +8,9 @@ const recipesRouter = require("./routes/recipesRoutes");
 const ingredientsRouter = require("./routes/ingredientsRoutes");
 const searchRouter = require("./routes/searchRoutes");
 const shoppintListRouter = require("./routes/shoppintListRoutes");
+// const ownRecipesRouter = require("./routes/ownRecipesRoutes");
+
+const favoritesRouter = require("./routes/favoritesRoutes");
 
 require("colors");
 require("dotenv").config();
@@ -28,9 +31,12 @@ app.use(cors());
 // set routes ________________________________
 app.use("/api/v1", recipesRouter);
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/ingrediets", ingredientsRouter);
+app.use("/api/v1/ingredients", ingredientsRouter);
 app.use("/api/v1", searchRouter);
 app.use("/api/v1", shoppintListRouter);
+app.use("/api/v1", favoritesRouter);
+// app.use("./api/v1", ownRecipesRouter);
+
 // Catch Errors ______________________________
 // обробка помилки 404
 
