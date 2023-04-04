@@ -7,6 +7,7 @@ const authRouter = require("./routes/authRoutes");
 const recipesRouter = require("./routes/recipesRoutes");
 const ingredientsRouter = require("./routes/ingredientsRoutes");
 const searchRouter = require("./routes/searchRoutes");
+const shoppintListRouter = require("./routes/shoppintListRoutes");
 
 require("colors");
 require("dotenv").config();
@@ -29,6 +30,7 @@ app.use("/api/v1", recipesRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/ingrediets", ingredientsRouter);
 app.use("/api/v1", searchRouter);
+app.use("/api/v1", shoppintListRouter);
 // Catch Errors ______________________________
 // обробка помилки 404
 
@@ -50,7 +52,5 @@ connectDb();
 // отримуємо порт і запускаємо сервер
 const { PORT = 5000 } = process.env;
 app.listen(PORT, () => {
-  console.log(
-    `server is running on port: , ${process.env.PORT}`.white.bgCyan.bold
-  );
+  console.log(`server is running on port: , ${process.env.PORT}`.white.bgCyan.bold);
 });
