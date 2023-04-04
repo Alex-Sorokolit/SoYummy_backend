@@ -10,6 +10,7 @@ const {
   getCurrentUser,
   updateUser,
   updateAvatar,
+  subscription,
 } = require("../controllers");
 
 const authRouter = express.Router();
@@ -45,6 +46,14 @@ authRouter.patch(
   authenticate,
   upload.single("avatar"),
   updateAvatar
+);
+
+// Subscription
+authRouter.post(
+  "/subscription",
+  authenticate,
+  validateBody(schemas.subscriptionSchema),
+  subscription
 );
 
 module.exports = authRouter;

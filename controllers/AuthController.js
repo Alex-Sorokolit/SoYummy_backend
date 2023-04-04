@@ -4,7 +4,9 @@ const gravatar = require("gravatar");
 require("dotenv").config();
 const { User } = require("../models/user");
 
-const { ctrlWrapper, HttpError } = require("../helpers");
+const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
+
+const subscribeLetter = require("../letters/subscribeLetter");
 
 const { SECRET_KEY } = process.env;
 
@@ -150,6 +152,33 @@ class AuthController {
 
     res.status(200).json({ avatarURL: path });
   }
+
+  async subscription(req, res) {
+    const { _id: id } = req.user;
+    const { email } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        subscription: { email, isSubscribe: true },
+      },
+      {
+        new: true,
+      }
+    );
+
+    const verifyEmail = {
+      to: email,
+      subject: "SoYummy subscription",
+      html: subscribeLetter(),
+    };
+
+    await sendEmail(verifyEmail);
+
+    res.status(200).json({
+      subscriptionEmail: user.subscription.email,
+    });
+  }
 }
 
 const authCtrl = new AuthController();
@@ -162,4 +191,5 @@ module.exports = {
   getCurrentUser: ctrlWrapper(authCtrl.getCurrentUser),
   updateUser: ctrlWrapper(authCtrl.updateUser),
   updateAvatar: ctrlWrapper(authCtrl.updateAvatar),
+  subscription: ctrlWrapper(authCtrl.subscription),
 };
