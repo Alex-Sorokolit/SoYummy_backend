@@ -4,7 +4,9 @@ const gravatar = require("gravatar");
 require("dotenv").config();
 const { User } = require("../models/user");
 
-const { ctrlWrapper, HttpError } = require("../helpers");
+const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
+
+const subscribeLetter = require("../letters/subscribeLetter");
 
 const { SECRET_KEY } = process.env;
 
@@ -20,21 +22,35 @@ class AuthController {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-
     const avatarURL = gravatar.url(email);
 
-    const newUser = await User.create({
+    await User.create({
       ...req.body,
       password: hashPassword,
-      token,
       avatarURL,
     });
+
+    const { _id } = await User.findOne({ email });
+
+    const payload = {
+      id: _id,
+    };
+
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+
+    const newUser = await User.findByIdAndUpdate(
+      _id,
+      { token },
+      {
+        new: true,
+      }
+    );
 
     res.status(201).json({
       name: newUser.name,
       email: newUser.email,
       token: newUser.token,
+      avatarURL: newUser.avatarURL,
     });
   }
 
@@ -47,10 +63,7 @@ class AuthController {
       throw HttpError(401, "Email or password invalid");
     }
 
-    const passwordCompare = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const passwordCompare = await bcrypt.compare(password, user.password);
 
     if (!passwordCompare) {
       throw HttpError(401, "Email or password invalid");
@@ -60,13 +73,9 @@ class AuthController {
       id: user._id,
     };
 
-    const token = jwt.sign(
-      payload,
-      process.env.SECRET_KEY,
-      {
-        expiresIn: "23h",
-      }
-    );
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+      expiresIn: "23h",
+    });
 
     await User.findByIdAndUpdate(user._id, { token });
 
@@ -111,10 +120,7 @@ class AuthController {
     const data = req.body;
 
     if (data.password) {
-      const hashPassword = await bcrypt.hash(
-        data.password,
-        10
-      );
+      const hashPassword = await bcrypt.hash(data.password, 10);
 
       await User.findByIdAndUpdate(id, {
         password: hashPassword,
@@ -126,14 +132,15 @@ class AuthController {
       return;
     }
 
-    const { name, email, avatarURL, updatedAt } =
-      await User.findByIdAndUpdate(id, data, {
+    const { name, email, avatarURL, updatedAt } = await User.findByIdAndUpdate(
+      id,
+      data,
+      {
         new: true,
-      });
+      }
+    );
 
-    res
-      .status(200)
-      .json({ name, email, avatarURL, updatedAt });
+    res.status(200).json({ name, email, avatarURL, updatedAt });
   }
 
   async updateAvatar(req, res) {
@@ -144,6 +151,33 @@ class AuthController {
     await User.findByIdAndUpdate(id, { avatarURL: path });
 
     res.status(200).json({ avatarURL: path });
+  }
+
+  async subscription(req, res) {
+    const { _id: id } = req.user;
+    const { email } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        subscription: { email, isSubscribe: true },
+      },
+      {
+        new: true,
+      }
+    );
+
+    const verifyEmail = {
+      to: email,
+      subject: "SoYummy subscription",
+      html: subscribeLetter(),
+    };
+
+    await sendEmail(verifyEmail);
+
+    res.status(200).json({
+      subscriptionEmail: user.subscription.email,
+    });
   }
 }
 
@@ -157,4 +191,5 @@ module.exports = {
   getCurrentUser: ctrlWrapper(authCtrl.getCurrentUser),
   updateUser: ctrlWrapper(authCtrl.updateUser),
   updateAvatar: ctrlWrapper(authCtrl.updateAvatar),
+  subscription: ctrlWrapper(authCtrl.subscription),
 };
