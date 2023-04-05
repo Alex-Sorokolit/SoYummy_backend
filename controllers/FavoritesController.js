@@ -29,8 +29,6 @@ class FavoritesController {
   }
   async getFavorites(req, res) {
     const { _id: userId } = req.user;
-    const { id } = req.params;
-    // const recipe = await Recipe.findById(id);
 
     const user = await User.findById(userId).populate({
       path: "favorites",
@@ -80,7 +78,5 @@ const favoritesCtrl = new FavoritesController();
 module.exports = {
   addFavorites: asyncHandler(favoritesCtrl.addFavorites),
   getFavorites: asyncHandler(favoritesCtrl.getFavorites),
-  deleteFavorites: asyncHandler(
-    favoritesCtrl.deleteFavorites
-  ),
+  deleteFavorites: asyncHandler(favoritesCtrl.deleteFavorites),
 };
