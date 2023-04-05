@@ -1,4 +1,4 @@
-const Recipe = require("../models/recipeModels");
+const { Recipe } = require("../models/recipeModels");
 const categories = require("../data/categories");
 const asyncHandler = require("express-async-handler"); // дозволяє відловлювати помилки (модний try catch)
 
@@ -133,6 +133,9 @@ db.cats.insert([
 ]);
 
 ⏺ Пошук _______________________________________________
+
+
+db.recipes.findOne({_id: ObjectId('642d596f029ad28b4aaa63ac') }) знайде документ по його id
 db.cats.find(); Буде шукати всі документи в колекцію cats
 find() шукати всі
 find().limit(5)  повернути 5 перших документів

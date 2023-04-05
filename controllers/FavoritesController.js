@@ -1,7 +1,7 @@
-const Recipe = require("../models/recipeModels");
-const { User } = require("../models/user");
-
 const asyncHandler = require("express-async-handler");
+
+const { Recipe } = require("../models/recipeModels");
+const { User } = require("../models/user");
 
 class FavoritesController {
   async addFavorites(req, res) {
@@ -19,7 +19,7 @@ class FavoritesController {
       userId,
       { $addToSet: { favorites: recipeId } },
       { new: true }
-    ).populate("favorites");
+    );
 
     res.status(201).json({
       code: 201,
@@ -54,7 +54,6 @@ class FavoritesController {
   async deleteFavorites(req, res) {
     const { _id: userId } = req.user;
     const { id: recipeId } = req.params;
-    console.log("recipeId", recipeId);
     const updateUser = await User.findByIdAndUpdate(
       userId,
       { $pull: { favorites: recipeId } },
