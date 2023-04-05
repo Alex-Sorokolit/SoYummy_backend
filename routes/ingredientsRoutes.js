@@ -7,10 +7,7 @@ const ingredientsRouter = express.Router();
 
 // Get ingredients-list /ingredients/list
 // створити ендпоінт  для отримання списку інгрієнтів
-ingredientsRouter.get(
-  "/list/:recipeid",
-  ingredientsController.getIngredientsList
-);
+ingredientsRouter.get("/list", ingredientsController.getIngredientsList);
 // Get ingredients-list /ingredients/list
 // створити ендпоінт  для отримання списку інгрієнтів
 //створити ендпоінт для пошуку рецептів по інгрідієнту

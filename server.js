@@ -8,6 +8,7 @@ const recipesRouter = require("./routes/recipesRoutes");
 const ingredientsRouter = require("./routes/ingredientsRoutes");
 const searchRouter = require("./routes/searchRoutes");
 const popularRecipeRouter = require("./routes/popularRecipeRoutes");
+const ownRecipesRouter = require("./routes/ownRecipesRoutes");
 
 const favoritesRouter = require("./routes/favoritesRoutes");
 
@@ -30,10 +31,12 @@ app.use(cors());
 // set routes ________________________________
 app.use("/api/v1", recipesRouter);
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/ingrediets", ingredientsRouter);
+app.use("/api/v1/ingredients", ingredientsRouter);
 app.use("/api/v1", searchRouter);
-app.use("/api/v1", favoritesRouter);
+app.use("/api/v1", favoritesRouter); popularRecipe
 app.use("/api/v1", popularRecipeRouter);
+app.use("./api/v1", ownRecipesRouter);
+
 
 // Catch Errors ______________________________
 // обробка помилки 404
@@ -56,5 +59,5 @@ connectDb();
 // отримуємо порт і запускаємо сервер
 const { PORT = 5000 } = process.env;
 app.listen(PORT, () => {
-  console.log(`server is running on port: , ${process.env.PORT}`.white.bgCyan.bold);
+  console.log(`server is running on port: , ${process.env.PORT}`.white.bgCyan.bold)
 });

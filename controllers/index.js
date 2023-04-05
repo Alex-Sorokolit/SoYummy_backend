@@ -8,4 +8,5 @@ module.exports = {
   getCurrentUser: controllers.getCurrentUser,
   updateUser: controllers.updateUser,
   updateAvatar: controllers.updateAvatar,
+  subscription: controllers.subscription,
 };
