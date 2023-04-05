@@ -11,6 +11,7 @@ const ownRecipesRouter = express.Router();
 ownRecipesRouter.post(
   "/own-recipes",
   validateBody(schemas.recipeJoiSchema),
+  authenticate,
   addRecipe
 );
 // Remove recipe

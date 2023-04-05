@@ -45,7 +45,7 @@ const recipeSchema = Schema(
 
     ingredients: [
       {
-        id: {
+        _id: {
           type: Schema.Types.ObjectId,
           ref: "Ingredient",
           required: true,
@@ -61,18 +61,16 @@ const recipeSchema = Schema(
       type: Number,
       // required: true,
     },
-    favorites: {
-      type: Array,
-      derault: [],
+    favorites: [{ type: Schema.Types.ObjectId, ref: "Recipe", required: true }],
+    thumb: {
+      type: String,
+      // required: true,
     },
-    // thumb: {
-    //   type: String,
-    //   required: true,
-    // },
-    // preview: {
-    //   type: String,
-    //   required: true,
-    // },
+    preview: {
+      type: String,
+      // required: true,
+    },
+    owner: { type: Schema.Types.ObjectId, ref: "user", required: true }, // тут буде зберігатися id користувача який додав контакт у базу, ref це колекція
   },
   { versionKey: false, timestamps: true }
 );
@@ -80,42 +78,43 @@ const recipeSchema = Schema(
 // валідація Joy перевіряє тіло запиту
 const recipeJoiSchema = Joi.object({
   title: Joi.string().required().messages({
-    "any.required": "Title is required",
-    "string.empty": "Title cannot be empty",
+    "any.required": "Joi: Title is required",
+    "string.empty": "Joi: Title cannot be empty",
   }),
   description: Joi.string().required().messages({
-    "any.required": "Description is required",
-    "string.empty": "Description cannot be empty",
+    "any.required": "Joi: Description is required",
+    "string.empty": "Joi: Description cannot be empty",
   }),
   category: Joi.string()
     .valid(...categoriesList)
     .required()
     .messages({
-      "any.required": "Category is required",
-      "string.empty": "Category cannot be empty",
+      "any.required": "Joi: Category is required",
+      "string.empty": "Joi: Category cannot be empty",
       "any.only": "Category must be one of the allowed values",
     }),
   time: Joi.number().required().messages({
-    "any.required": "Time is required",
-    "number.empty": "Time cannot be empty",
+    "any.required": "Joi: Time is required",
+    "number.empty": "Joi: Time cannot be empty",
   }),
+
   ingredients: Joi.array()
-    .items(
-      Joi.object({
-        id: Joi.string().required(),
-        measure: Joi.string().required(),
-      })
-    )
+    //   .items(
+    //     Joi.object({
+    //       _id: Joi.objectId(),
+    //       measure: Joi.string(),
+    //     })
+    //   )
     // .required()
     .messages({
-      "any.required": "Ingredients are required",
-      "array.empty": "Ingredients cannot be empty",
+      "any.required": "Joi: Ingredients are required",
+      "array.empty": "Joi: Ingredients cannot be empty",
     }),
   instructions: Joi.string().required().min(2).max(2000).messages({
-    "any.required": "Instructions are required",
-    "string.empty": "Instructions cannot be empty",
-    "string.min": "Instructions must be at least 2 characters long",
-    "string.max": "Instructions cannot be longer than 2000 characters",
+    "any.required": "Joi: Instructions are required",
+    "string.empty": "Joi: Instructions cannot be empty",
+    "string.min": "Joi: Instructions must be at least 2 characters long",
+    "string.max": "Joi: Instructions cannot be longer than 2000 characters",
   }),
   popularity: Joi.number().default(0),
   favorites: Joi.array().default([]),

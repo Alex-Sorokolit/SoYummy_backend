@@ -11,14 +11,17 @@ class OwnRecipesController {
       !description ||
       !instructions ||
       !category ||
-      !time
-      // !ingredients
+      !time ||
+      !ingredients
     ) {
       res.status(400);
       throw new Error("Controller: Please provide all required fields");
     }
 
-    const newRecipe = await Recipe.create(req.body);
+    // дістаємо id із об'єкта запиту і перейменовуємо в owner
+    const { _id: owner } = req.user;
+
+    const newRecipe = await Recipe.create({ ...req.body, owner });
 
     if (!newRecipe) {
       res.status(500);
