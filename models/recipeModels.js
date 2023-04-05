@@ -30,18 +30,18 @@ const recipeSchema = Schema(
     },
     instructions: {
       type: String,
-      // required: [true, "DB: instruction is required"],
+      required: [true, "DB: instruction is required"],
       minlength: 2,
       maxlength: 2000,
     },
     category: {
       type: String,
       enum: categoriesList,
-      // required: [true, "DB: category is required"],
+      required: [true, "DB: category is required"],
     },
     time: {
       type: Number,
-      // required: [true, "DB: time is required"],
+      required: [true, "DB: time is required"],
     },
     ingredients: [
       {

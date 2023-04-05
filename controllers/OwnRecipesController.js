@@ -33,10 +33,15 @@ class OwnRecipesController {
       data: newRecipe,
     });
   }
+  async removeRecipe(req, res) {
+    const { recipeId } = req.params;
+    console.log(recipeId);
+  }
 }
 
 const ownRecipeCtrl = new OwnRecipesController();
 
 module.exports = {
   addRecipe: asyncHandler(ownRecipeCtrl.addRecipe),
+  removeRecipe: asyncHandler(ownRecipeCtrl.removeRecipe),
 };
