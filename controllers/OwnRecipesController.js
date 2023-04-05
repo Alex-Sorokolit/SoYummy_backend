@@ -2,6 +2,7 @@ const { Recipe } = require("../models/recipeModels");
 const asyncHandler = require("express-async-handler");
 
 class OwnRecipesController {
+  // Add ownRecipe
   async addRecipe(req, res) {
     // console.log(req.body);
     const { title, instructions, description, category, time, ingredients } =
@@ -36,8 +37,61 @@ class OwnRecipesController {
 
   // Remove ownRecipe
   async removeRecipe(req, res) {
-    const { recipeId } = req.params;
-    console.log(recipeId);
+    const { id: recipeId } = req.params;
+    const { _id: userId } = req.user;
+
+    if (!recipeId) {
+      res.status(400);
+      throw new Error("Controller: recipeId is required");
+    }
+
+    if (!userId) {
+      res.status(400);
+      throw new Error("Controller: user not authorized");
+    }
+
+    // знайти рецепт по id і перевірити чи належить цей рецепт користувачу
+    const result = await Recipe.findOne({ _id: recipeId, owner: userId });
+
+    if (!result) {
+      res.status(400);
+      throw new Error("Controller: Recipe not found");
+    }
+
+    //  видалити рецепт
+    const deletedRecipe = await Recipe.findByIdAndRemove(recipeId);
+
+    if (!deletedRecipe) {
+      res.status(400);
+      throw new Error("Controller: Recipe not found");
+    }
+
+    res.json({
+      status: "success",
+      code: 200,
+      message: "Recipe deleted",
+      data: deletedRecipe,
+    });
+  }
+
+  // Get all ownRecipes
+  async getAllOwnRecipes(req, res) {
+    const { _id: userId } = req.user;
+
+    const result = await Recipe.find({ owner: userId });
+
+    if (!result) {
+      res.status(400);
+      throw new Error("Controller: Recipes not found");
+    }
+
+    res.json({
+      status: "success",
+      code: 200,
+      message: "Own Recipes",
+      data: result,
+      quantity: result.length,
+    });
   }
 }
 
@@ -46,4 +100,5 @@ const ownRecipeCtrl = new OwnRecipesController();
 module.exports = {
   addRecipe: asyncHandler(ownRecipeCtrl.addRecipe),
   removeRecipe: asyncHandler(ownRecipeCtrl.removeRecipe),
+  getAllOwnRecipes: asyncHandler(ownRecipeCtrl.getAllOwnRecipes),
 };

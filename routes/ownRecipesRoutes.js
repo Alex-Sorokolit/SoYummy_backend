@@ -5,27 +5,25 @@ const { schemas } = require("../models/recipeModels");
 const {
   addRecipe,
   removeRecipe,
+  getAllOwnRecipes,
 } = require("../controllers/OwnRecipesController");
 
 const ownRecipesRouter = express.Router();
 
-// Add recipe
-//  створити ендпоінт для додавання рецептів
+// Add own recipe
 ownRecipesRouter.post(
   "/own-recipes",
   validateBody(schemas.recipeJoiSchema),
   authenticate,
   addRecipe
 );
-// Remove recipe
-// створити ендпоінт для видалення рецепта
+// Remove own recipe
 ownRecipesRouter.delete(
-  "/own-recipes/:recipeId",
+  "/own-recipes/:id",
   authenticate,
   isValidId,
   removeRecipe
 );
 // Get all recipes by user createt
-// створити ендпоінт для отримання рецептів створених цим же юзером
-
+ownRecipesRouter.get("/own-recipes", authenticate, getAllOwnRecipes);
 module.exports = ownRecipesRouter;
