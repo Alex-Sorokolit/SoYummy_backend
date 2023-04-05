@@ -56,7 +56,11 @@ const recipeSchema = Schema(
         },
       },
     ],
-    favorites: [{ type: Schema.Types.ObjectId, ref: "Recipe", required: true }],
+    // favorites: [{ type: Schema.Types.ObjectId, ref: "Recipe" }],
+    favorites: {
+      type: Array,
+      default: [],
+    },
     thumb: {
       type: String,
       // required: true,
@@ -114,7 +118,7 @@ const recipeJoiSchema = Joi.object({
   favorites: Joi.array().default([]),
 }).options({ abortEarly: false, stripUnknown: true });
 
-Recipe = model("recipe", recipeSchema);
+const Recipe = model("Recipe", recipeSchema);
 
 const schemas = {
   recipeJoiSchema,

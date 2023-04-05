@@ -1,10 +1,8 @@
-const { User } = require("../models/user");
 const { Recipe } = require("../models/recipeModels");
 const asyncHandler = require("express-async-handler");
 
 class PopularController {
   async getPopular(req, res) {
-    const users = await User.find().populate("favorites");
     const recipeCounts = {};
     const popularRecipesCount = 4;
 

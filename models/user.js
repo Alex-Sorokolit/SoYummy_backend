@@ -1,3 +1,4 @@
+// const mongoose = require("mongoose");
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
@@ -30,10 +31,12 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    favorites: {
-      type: Array,
-      default: [],
-    },
+    favorites: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Recipe",
+      },
+    ],
     subscription: {
       email: {
         type: String,
