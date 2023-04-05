@@ -2,13 +2,13 @@
 const express = require("express");
 
 // const { authenticate } = require("../middlewares");
-const popularController = require("../controllers/PopularController");
+const { getPopular } = require("../controllers/PopularController");
 
 const popularRecipeRouter = express.Router();
 
 // Add to favorite
 //  створити ендпоінт на отримання популярних рецептів.
 // Популярність вираховується по тому, як багато користувачей додали рецепт у вибрані.
-popularRecipeRouter.get("/popular-recipe", popularController.getFavorites);
+popularRecipeRouter.get("/popular-recipes", getPopular);
 
 module.exports = popularRecipeRouter;

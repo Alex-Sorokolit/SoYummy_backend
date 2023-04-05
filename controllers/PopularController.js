@@ -3,11 +3,11 @@ const Recipe = require("../models/recipeModels");
 const asyncHandler = require("express-async-handler");
 
 class PopularController {
-  async getFavorites(req, res) {
+  async getPopular(req, res) {
     const users = await User.find().populate("favorites");
     const recipeCounts = {};
     const popularRecipesCount = 4;
-
+    console.log("renamed controller");
     // Обчислюємо кількість улюблених рецептів для кожного рецепта
     await Recipe.aggregate([
       { $unwind: "$favorites" },
@@ -43,5 +43,5 @@ class PopularController {
 const popularCtrl = new PopularController();
 
 module.exports = {
-  getFavorites: asyncHandler(popularCtrl.getFavorites),
+  getPopular: asyncHandler(popularCtrl.getPopular),
 };
