@@ -33,6 +33,8 @@ class OwnRecipesController {
       data: newRecipe,
     });
   }
+
+  // Remove ownRecipe
   async removeRecipe(req, res) {
     const { recipeId } = req.params;
     console.log(recipeId);

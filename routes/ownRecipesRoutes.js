@@ -28,4 +28,4 @@ ownRecipesRouter.delete(
 // Get all recipes by user createt
 // створити ендпоінт для отримання рецептів створених цим же юзером
 
-ownRecipesRouter.module.exports = ownRecipesRouter;
+module.exports = ownRecipesRouter;
