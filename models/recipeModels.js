@@ -1,5 +1,6 @@
 const { model, Schema } = require("mongoose");
 const Joi = require("joi");
+
 const categoriesList = [
   "Beef",
   "Breakfast",
@@ -42,7 +43,6 @@ const recipeSchema = Schema(
       type: Number,
       // required: [true, "DB: time is required"],
     },
-
     ingredients: [
       {
         _id: {
@@ -56,11 +56,6 @@ const recipeSchema = Schema(
         },
       },
     ],
-
-    popularity: {
-      type: Number,
-      // required: true,
-    },
     favorites: [{ type: Schema.Types.ObjectId, ref: "Recipe", required: true }],
     thumb: {
       type: String,
@@ -99,13 +94,13 @@ const recipeJoiSchema = Joi.object({
   }),
 
   ingredients: Joi.array()
-    //   .items(
-    //     Joi.object({
-    //       _id: Joi.objectId(),
-    //       measure: Joi.string(),
-    //     })
-    //   )
-    // .required()
+    .items(
+      Joi.object({
+        _id: Joi.string().hex().length(24).message("ingredient id not valid"),
+        measure: Joi.string(),
+      })
+    )
+    .required()
     .messages({
       "any.required": "Joi: Ingredients are required",
       "array.empty": "Joi: Ingredients cannot be empty",
@@ -116,7 +111,6 @@ const recipeJoiSchema = Joi.object({
     "string.min": "Joi: Instructions must be at least 2 characters long",
     "string.max": "Joi: Instructions cannot be longer than 2000 characters",
   }),
-  popularity: Joi.number().default(0),
   favorites: Joi.array().default([]),
 }).options({ abortEarly: false, stripUnknown: true });
 
