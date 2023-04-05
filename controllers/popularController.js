@@ -5,6 +5,7 @@ const asyncHandler = require("express-async-handler");
 class PopularController {
   async getFavorites(req, res) {
     const users = await User.find().populate("favorites");
+    // console.log(users);
     const recipeCounts = {};
     const popularRecipesCount = 4;
 
