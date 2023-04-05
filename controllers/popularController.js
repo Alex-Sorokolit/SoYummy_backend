@@ -6,22 +6,32 @@ class PopularController {
   async getFavorites(req, res) {
     const users = await User.find().populate("favorites");
     const recipeCounts = {};
-    for (const user of users) {
-      for (const favorite of user.favorites) {
-        if (recipeCounts[favorite]) {
-          recipeCounts[favorite]++;
-        } else {
-          recipeCounts[favorite] = 1;
-        }
-      }
-    }
+    const popularRecipesCount = 4;
+
+    // Обчислюємо кількість улюблених рецептів для кожного рецепта
+    await Recipe.aggregate([
+      { $unwind: "$favorites" },
+      { $group: { _id: "$_id", count: { $sum: 1 } } },
+    ]).then((results) => {
+      // Зберігаємо результати у змінну recipeCounts
+      results.forEach(({ _id, count }) => (recipeCounts[_id] = count));
+    });
+
+    // Сортуємо рецепти за кількістю улюблень
     const sortedRecipes = Object.entries(recipeCounts).sort(
       ([_, count1], [__, count2]) => count2 - count1
     );
+
+    // Вибираємо найпопулярніші рецепти
     const popularRecipes = await Recipe.find()
       .where("_id")
-      .in(sortedRecipes.slice(0, 4).map(([recipeId]) => recipeId && recipeId.trim()))
+      .in(
+        sortedRecipes
+          .slice(0, popularRecipesCount)
+          .map(([recipeId]) => recipeId && recipeId.trim())
+      )
       .exec();
+
     res.status(200).json({
       code: 200,
       message: "Received the most popular recipes",
