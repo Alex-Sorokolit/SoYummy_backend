@@ -2,16 +2,30 @@
 const express = require("express");
 const shoppingListController = require("../controllers/ShoppingListController");
 
+const { authenticate } = require("../middlewares");
+
 const shoppintListRouter = express.Router();
 
 // Add product to cart
 //  створити ендпоінт для додавання продукту в список покупок користувача
-shoppintListRouter.post("/shopping-list", shoppingListController.addShoppingList);
+shoppintListRouter.post(
+  "/shopping-list",
+  authenticate,
+  shoppingListController.addShoppingList
+);
 // Remove product from cart
 // створити ендпоінт для видалення продукту зі списку покупок користувача
-shoppintListRouter.delete("/shopping-list", shoppingListController.deleteShopping);
+shoppintListRouter.delete(
+  "/shopping-list",
+  authenticate,
+  shoppingListController.deleteShopping
+);
 // Get products list
 // створити ендпоінт для отримання продуктів зі списку покупок користувача
-shoppintListRouter.get("/shopping-list", shoppingListController.getShopping);
+shoppintListRouter.get(
+  "/shopping-list",
+  authenticate,
+  shoppingListController.getShopping
+);
 
 module.exports = shoppintListRouter;
