@@ -56,11 +56,8 @@ const recipeSchema = Schema(
         },
       },
     ],
-    // favorites: [{ type: Schema.Types.ObjectId, ref: "Recipe" }],
-    favorites: {
-      type: Array,
-      default: [],
-    },
+    favorites: [{ type: Schema.Types.ObjectId, ref: "Recipe", required: true }],
+
     thumb: {
       type: String,
       // required: true,
