@@ -10,6 +10,7 @@ const searchRouter = require("./routes/searchRoutes");
 const ownRecipesRouter = require("./routes/ownRecipesRoutes");
 
 const favoritesRouter = require("./routes/favoritesRoutes");
+const popularRecipeRouter = require("./routes/popularRecipeRoutes");
 
 require("colors");
 require("dotenv").config();
@@ -34,6 +35,7 @@ app.use("/api/v1/ingredients", ingredientsRouter);
 app.use("/api/v1", searchRouter);
 app.use("/api/v1", favoritesRouter);
 app.use("/api/v1", ownRecipesRouter);
+app.use("/api/v1", popularRecipeRouter);
 
 // Catch Errors ______________________________
 // обробка помилки 404
