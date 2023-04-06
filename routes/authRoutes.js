@@ -11,11 +11,30 @@ const {
   updateUser,
   updateAvatar,
   subscription,
+  googleAuth,
 } = require("../controllers");
 
 const authRouter = express.Router();
 
-const { validateBody, authenticate, upload } = require("../middlewares");
+const {
+  validateBody,
+  authenticate,
+  upload,
+  passport,
+} = require("../middlewares");
+
+// Route from front-end when press btn for google registration
+authRouter.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+//When you choice your account, google use callback on this rout
+authRouter.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false }),
+  googleAuth
+);
 
 // Registration  (signup)
 authRouter.post("/register", validateBody(schemas.registerSchema), register);

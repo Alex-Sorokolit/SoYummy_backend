@@ -8,9 +8,25 @@ const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
 
 const subscribeLetter = require("../letters/subscribeLetter");
 
-// const { SECRET_KEY } = process.env;
+const { SECRET_KEY } = process.env;
 
 class AuthController {
+  async googleAuth(req, res) {
+    const { _id: id } = req.user;
+
+    const payload = {
+      id,
+    };
+
+    const token = jwt.sign(payload, SECRET_KEY, {
+      expiresIn: "23h",
+    });
+
+    await User.findByIdAndUpdate(id, { token });
+
+    res.redirect(`https://romaniv2511.github.io/so-yummy/?token=${token}`);
+  }
+
   async register(req, res) {
     const { email, password } = req.body;
 
@@ -36,7 +52,7 @@ class AuthController {
       id: _id,
     };
 
-    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+    const token = jwt.sign(payload, SECRET_KEY, {
       expiresIn: "23h",
     });
 
@@ -75,7 +91,7 @@ class AuthController {
       id: user._id,
     };
 
-    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+    const token = jwt.sign(payload, SECRET_KEY, {
       expiresIn: "23h",
     });
 
@@ -194,4 +210,5 @@ module.exports = {
   updateUser: ctrlWrapper(authCtrl.updateUser),
   updateAvatar: ctrlWrapper(authCtrl.updateAvatar),
   subscription: ctrlWrapper(authCtrl.subscription),
+  googleAuth: ctrlWrapper(authCtrl.googleAuth),
 };
