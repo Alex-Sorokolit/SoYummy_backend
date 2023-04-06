@@ -18,8 +18,6 @@ require("dotenv").config();
 // const configPath = path.join(__dirname, "config", ".env");
 // dotenv.config({ path: configPath });
 
-// console.log(process.env);
-
 // створення сервера
 const app = express();
 

@@ -8,8 +8,6 @@ require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
 
-console.log("secren_key", SECRET_KEY);
-
 const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
 
