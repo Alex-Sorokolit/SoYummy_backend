@@ -8,7 +8,7 @@ const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
 
 const subscribeLetter = require("../letters/subscribeLetter");
 
-const { SECRET_KEY } = process.env;
+// const { SECRET_KEY } = process.env;
 
 class AuthController {
   async googleAuth(req, res) {
@@ -52,7 +52,9 @@ class AuthController {
       id: _id,
     };
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+      expiresIn: "23h",
+    });
 
     const newUser = await User.findByIdAndUpdate(
       _id,

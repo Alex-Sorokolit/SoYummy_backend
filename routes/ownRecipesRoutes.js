@@ -1,14 +1,29 @@
 //http://localhost:5000/api/v1/ownrecipes
 const express = require("express");
+const { validateBody, authenticate, isValidId } = require("../middlewares");
+const { schemas } = require("../models/recipeModels");
+const {
+  addRecipe,
+  removeRecipe,
+  getAllOwnRecipes,
+} = require("../controllers/OwnRecipesController");
 
 const ownRecipesRouter = express.Router();
 
-// Add recipe
-//  створити ендпоінт для додавання рецептів
-// Remove recipe
-// створити ендпоінт для видалення рецепта
-
+// Add own recipe
+ownRecipesRouter.post(
+  "/own-recipes",
+  validateBody(schemas.recipeJoiSchema),
+  authenticate,
+  addRecipe
+);
+// Remove own recipe
+ownRecipesRouter.delete(
+  "/own-recipes/:id",
+  authenticate,
+  isValidId,
+  removeRecipe
+);
 // Get all recipes by user createt
-// створити ендпоінт для отримання рецептів створених цим же юзером
-
-ownRecipesRouter.module.exports = ownRecipesRouter;
+ownRecipesRouter.get("/own-recipes", authenticate, getAllOwnRecipes);
+module.exports = ownRecipesRouter;
