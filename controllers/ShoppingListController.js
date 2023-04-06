@@ -1,29 +1,33 @@
-const Ingredient = require("../models/ingredientsModels");
-const { User } = require("../models/user");
+// const mongoose = require("mongoose");
+// const ObjectId = require("mongoose").Types.ObjectId;
 
 const asyncHandler = require("express-async-handler");
+
+const Ingredient = require("../models/ingredientsModels");
+const { User } = require("../models/user");
 
 class ShoppingListController {
   async addShoppingList(req, res) {
     const { _id: userId } = req.user;
     const { _id: ingredientId } = req.body;
     const ingredient = await Ingredient.findById(ingredientId);
-    console.log("ingredient", ingredient);
+
     if (!ingredient) {
       return res.status(404).json({
         code: 404,
         message: "Ingredient not found",
       });
     }
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $addToSet: { shoppingList: ingredientId } },
-      { new: true }
-    ).populate("shoppingList");
 
-    res.status(201).json({
-      code: 201,
-      message: "The ingredient has been added to the list",
+    const updatedUser = await User.findOneAndUpdate(
+      userId,
+      { $push: { shoppingList: ingredientId } },
+      { new: true }
+    );
+
+    res.status(200).json({
+      code: 200,
+      message: "Ingredients have been added to shopping list",
       data: updatedUser.shoppingList,
     });
   }
@@ -33,7 +37,7 @@ class ShoppingListController {
 
     const user = await User.findById(userId).populate({
       path: "shoppingList",
-      model: "ingredient",
+      model: "Ingredient",
     });
 
     const shoppingUpdate = user.shoppingList;
@@ -54,8 +58,8 @@ class ShoppingListController {
 
   async deleteShopping(req, res) {
     const { _id: userId } = req.user;
-    const { id: ingredientId } = req.params;
-    console.log("ingredientId", ingredientId);
+    const { _id: ingredientId } = req.body;
+
     const updateUser = await User.findByIdAndUpdate(
       userId,
       { $pull: { shoppingList: ingredientId } },
