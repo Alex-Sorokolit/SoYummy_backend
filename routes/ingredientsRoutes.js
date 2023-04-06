@@ -9,9 +9,9 @@ const express = require("express");
 const ingredientsRouter = express.Router();
 
 // Get ingredients-list
-ingredientsRouter.get("ingredients/list", getIngredientsList);
+ingredientsRouter.get("/ingredients/list", getIngredientsList);
 
 // Search ingredient
-ingredientsRouter.get("ingredients/search", searchIngredient);
+ingredientsRouter.get("/ingredients", searchIngredient);
 
 module.exports = ingredientsRouter;

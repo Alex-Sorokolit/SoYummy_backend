@@ -12,17 +12,36 @@ class SearchController {
     const skip = (page - 1) * limit;
 
     if (type === "Ingredients") {
-      // const result = await Ingredients.find({
-      //   ttl: { $regex: new RegExp(query, "i") },
-      // })
-      //   .skip(skip)
-      //   .limit(limit);
-      // res.status(200).json({
-      //   code: 200,
-      //   message: "success",
-      //   data: result,
-      //   quantity: result.length,
-      // });
+      const regex = new RegExp(query, "i");
+      const result = await Recipe.aggregate([
+        {
+          $lookup: {
+            from: "ingredients",
+            localField: "ingredients._id",
+            foreignField: "_id",
+            as: "ingredients",
+          },
+        },
+        {
+          $match: {
+            "ingredients.ttl": {
+              $regex: regex,
+            },
+          },
+        },
+      ]);
+
+      if (!result) {
+        res.status(404);
+        throw new Error(`${query} not found`);
+      }
+
+      res.status(200).json({
+        code: 200,
+        message: "success",
+        data: result,
+        quantity: result.length,
+      });
     }
 
     const result = await Recipe.find({
@@ -30,6 +49,12 @@ class SearchController {
     })
       .skip(skip)
       .limit(limit);
+
+    if (!result && result.length === 0) {
+      res.status(404);
+      throw new Error(`${query} not found`);
+    }
+
     res.status(200).json({
       code: 200,
       message: "success",

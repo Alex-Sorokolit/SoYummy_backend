@@ -35,7 +35,7 @@ app.use("/api/v1", ingredientsRouter);
 app.use("/api/v1", searchRouter);
 app.use("/api/v1", favoritesRouter);
 app.use("/api/v1", popularRecipeRouter);
-app.use("./api/v1", ownRecipesRouter);
+app.use("/api/v1", ownRecipesRouter);
 
 // Catch Errors ______________________________
 // обробка помилки 404
