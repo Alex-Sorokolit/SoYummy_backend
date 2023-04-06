@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/Alex-Sorokolit/SoYummy_backend#readme",
   "devDependencies": {
-    "cross-env": "^7.0.3",
     "nodemon": "^2.0.22"
   },
   "dependencies": {
@@ -29,6 +28,7 @@
     "cloudinary": "^1.35.0",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
@@ -38,7 +38,6 @@
     "mongoose": "^7.0.3",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
-    "nanoid": "^4.0.2",
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
     "uuid": "^9.0.0"

@@ -15,8 +15,10 @@ const favoritesRouter = require("./routes/favoritesRoutes");
 require("colors");
 require("dotenv").config();
 // отримуємо шлях до файлу .env
-const configPath = path.join(__dirname, "config", ".env");
-dotenv.config({ path: configPath });
+// const configPath = path.join(__dirname, "config", ".env");
+// dotenv.config({ path: configPath });
+
+// console.log(process.env);
 
 // створення сервера
 const app = express();
@@ -57,5 +59,7 @@ connectDb();
 // отримуємо порт і запускаємо сервер
 const { PORT = 5000 } = process.env;
 app.listen(PORT, () => {
-  console.log(`server is running on port: , ${process.env.PORT}`.white.bgCyan.bold);
+  console.log(
+    `server is running on port: , ${process.env.PORT}`.white.bgCyan.bold
+  );
 });
