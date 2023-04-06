@@ -11,7 +11,7 @@ class ShoppingListController {
     const { _id: userId } = req.user;
     const { _id: ingredientId } = req.body;
     const ingredient = await Ingredient.findById(ingredientId);
-
+    // console.log("ingredient", ingredient);
     if (!ingredient) {
       return res.status(404).json({
         code: 404,
