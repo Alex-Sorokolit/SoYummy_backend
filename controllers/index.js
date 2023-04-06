@@ -9,4 +9,5 @@ module.exports = {
   updateUser: controllers.updateUser,
   updateAvatar: controllers.updateAvatar,
   subscription: controllers.subscription,
+  googleAuth: controllers.googleAuth,
 };
