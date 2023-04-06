@@ -49,6 +49,12 @@ const userSchema = new Schema(
         default: false,
       },
     },
+    shoppingList: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Ingredient",
+      },
+    ],
   },
   { versionKey: false, timestamps: true }
 );
@@ -110,6 +116,9 @@ const subscriptionSchema = Joi.object({
 const updateFavoritesSchema = Joi.object({
   favorites: Joi.object({
     recipe: Joi.object(),
+  }),
+  shoppingList: Joi.object({
+    ingredient: Joi.object(),
   }),
 });
 
