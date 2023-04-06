@@ -15,8 +15,8 @@ const favoritesRouter = require("./routes/favoritesRoutes");
 require("colors");
 require("dotenv").config();
 // отримуємо шлях до файлу .env
-const configPath = path.join(__dirname, "config", ".env");
-dotenv.config({ path: configPath });
+// const configPath = path.join(__dirname, "config", ".env");
+// dotenv.config({ path: configPath });
 
 // створення сервера
 const app = express();

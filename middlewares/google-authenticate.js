@@ -6,12 +6,13 @@ const { User } = require("../models/user");
 
 require("dotenv").config();
 
-// const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
+const { GOOGLE_ID, GOOGLE_SECRET } = process.env;
 
 const googleParams = {
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:5000/api/v1/auth/google/callback",
+  clientID: GOOGLE_ID,
+  clientSecret: GOOGLE_SECRET,
+  callbackURL: "https://soyummy-tw3y.onrender.com/api/v1/auth/google/callback",
+  // callbackURL: "http://localhost:5000/api/v1/auth/google/callback",
   passReqToCallback: true,
 };
 
