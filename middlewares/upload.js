@@ -2,12 +2,23 @@ const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 
+require("dotenv").config();
+
+const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
+
+cloudinary.config({
+  cloud_name: CLOUD_NAME,
+  api_key: API_KEY,
+  api_secret: API_SECRET,
+});
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   folder: "Avatars",
   allowedFormats: ["jpg", "png", "jpeg"],
   filename: (req, file, cb) => {
     const { _id } = req.user;
+    console.log(_id);
     cb(null, _id + "-" + file.originalname);
   },
 });
