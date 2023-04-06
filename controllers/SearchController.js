@@ -12,17 +12,17 @@ class SearchController {
     const skip = (page - 1) * limit;
 
     if (type === "Ingredients") {
-      const result = await Ingredients.find({
-        ttl: { $regex: new RegExp(query, "i") },
-      })
-        .skip(skip)
-        .limit(limit);
-      res.status(200).json({
-        code: 200,
-        message: "success",
-        data: result,
-        quantity: result.length,
-      });
+      // const result = await Ingredients.find({
+      //   ttl: { $regex: new RegExp(query, "i") },
+      // })
+      //   .skip(skip)
+      //   .limit(limit);
+      // res.status(200).json({
+      //   code: 200,
+      //   message: "success",
+      //   data: result,
+      //   quantity: result.length,
+      // });
     }
 
     const result = await Recipe.find({
