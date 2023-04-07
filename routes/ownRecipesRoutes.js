@@ -1,6 +1,11 @@
 //http://localhost:5000/api/v1/ownrecipes
 const express = require("express");
-const { validateBody, authenticate, isValidId } = require("../middlewares");
+const {
+  validateBody,
+  authenticate,
+  isValidId,
+  upload,
+} = require("../middlewares");
 const { schemas } = require("../models/recipeModels");
 const {
   addRecipe,
@@ -15,8 +20,10 @@ ownRecipesRouter.post(
   "/own-recipes",
   validateBody(schemas.recipeJoiSchema),
   authenticate,
+  upload.single("thumb"),
   addRecipe
 );
+// ми очікуємо в полі thumb один файл, всі інші поля будуть текстовими, їх треба записати в req.body
 // Remove own recipe
 ownRecipesRouter.delete(
   "/own-recipes/:id",
