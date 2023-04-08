@@ -11,7 +11,7 @@ const shoppintListRouter = express.Router();
 shoppintListRouter.post(
   "/shopping-list",
   authenticate,
-  shoppingListController.addShoppingList
+  shoppingListController.addToShoppingList
 );
 // Remove product from cart
 // створити ендпоінт для видалення продукту зі списку покупок користувача

@@ -7,31 +7,10 @@ const Ingredient = require("../models/ingredientsModels");
 const { User } = require("../models/user");
 
 class ShoppingListController {
-  async addShoppingList(req, res) {
-    const { _id: userId } = req.user;
-    const { _id: ingredientId } = req.body;
-    const ingredient = await Ingredient.findById(ingredientId);
-    // console.log("ingredient", ingredient);
-    if (!ingredient) {
-      return res.status(404).json({
-        code: 404,
-        message: "Ingredient not found",
-      });
-    }
-
-    const updatedUser = await User.findOneAndUpdate(
-      userId,
-      { $push: { shoppingList: ingredientId } },
-      { new: true }
-    );
-
-    res.status(200).json({
-      code: 200,
-      message: "Ingredients have been added to shopping list",
-      data: updatedUser.shoppingList,
-    });
+  async addToShoppingList(req, res) {
+    const { _id: id, measure } = req.body;
+    console.log(id, measure);
   }
-
   async getShopping(req, res) {
     const { _id: userId } = req.user;
 
@@ -81,7 +60,7 @@ class ShoppingListController {
 const shoppingCtrl = new ShoppingListController();
 
 module.exports = {
-  addShoppingList: asyncHandler(shoppingCtrl.addShoppingList),
+  addToShoppingList: asyncHandler(shoppingCtrl.addToShoppingList),
   getShopping: asyncHandler(shoppingCtrl.getShopping),
   deleteShopping: asyncHandler(shoppingCtrl.deleteShopping),
 };

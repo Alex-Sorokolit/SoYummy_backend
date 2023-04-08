@@ -51,8 +51,15 @@ const userSchema = new Schema(
     },
     shoppingList: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Ingredient",
+        _id: {
+          type: Schema.Types.ObjectId,
+          ref: "Ingredient",
+          required: true,
+        },
+        measure: {
+          type: String,
+          required: true,
+        },
       },
     ],
   },
