@@ -22,9 +22,10 @@ class ShoppingListController {
       throw new Error("Controller: Please provide all required fields");
     }
     // Оновлюємо користувача
+    // якщо потрібно щоб id не могли дублюватись використовуємо $addToSet: замість $push:
     const result = await User.findByIdAndUpdate(
       userId,
-      { $addToSet: { shoppingList: ingredient } },
+      { $push: { shoppingList: ingredient } },
       { new: true }
     );
     // Якщо не вдалось записати викидаємо помилку
