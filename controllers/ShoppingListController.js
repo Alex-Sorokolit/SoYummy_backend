@@ -8,13 +8,26 @@ const { User } = require("../models/user");
 
 class ShoppingListController {
   async addToShoppingList(req, res) {
-    const { _id: id, measure } = req.body;
+    // Отримуємо id користувача
+    const { _id: userId } = req.user;
+
+    // отримуємо інгредієнт від користувача
+    const { _id, measure } = req.body;
     // const { shoppingList } = req.body;
-    console.log(id, measure);
-    if (!id || !measure) {
+    const ingredient = { _id, measure };
+    console.log(ingredient);
+    // Перевіряємо чи передані всі дані
+    if (!_id || !measure) {
       res.status(400);
       throw new Error("Controller: Please provide all required fields");
     }
+    // Оновлюємо користувача
+    const result = await User.findByIdAndUpdate(userId, {
+      shoppingList: ingredient,
+    });
+    console.log(result);
+    // Якщо не вдалось записати викидаємо помилку
+    // Якщо вдалося записати повертаємо результат
   }
   async getShopping(req, res) {
     const { _id: userId } = req.user;
