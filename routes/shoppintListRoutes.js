@@ -8,7 +8,7 @@ const shoppintListRouter = express.Router();
 
 // Add product to cart
 //  створити ендпоінт для додавання продукту в список покупок користувача
-shoppintListRouter.post(
+shoppintListRouter.put(
   "/shopping-list",
   authenticate,
   shoppingListController.addToShoppingList

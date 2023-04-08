@@ -9,7 +9,12 @@ const { User } = require("../models/user");
 class ShoppingListController {
   async addToShoppingList(req, res) {
     const { _id: id, measure } = req.body;
+    // const { shoppingList } = req.body;
     console.log(id, measure);
+    if (!id || !measure) {
+      res.status(400);
+      throw new Error("Controller: Please provide all required fields");
+    }
   }
   async getShopping(req, res) {
     const { _id: userId } = req.user;
