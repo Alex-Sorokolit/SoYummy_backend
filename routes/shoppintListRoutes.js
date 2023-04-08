@@ -8,15 +8,15 @@ const shoppintListRouter = express.Router();
 
 // Add product to cart
 //  створити ендпоінт для додавання продукту в список покупок користувача
-shoppintListRouter.post(
-  "/shopping-list",
+shoppintListRouter.patch(
+  "/shopping-list/add",
   authenticate,
-  shoppingListController.addShoppingList
+  shoppingListController.addToShoppingList
 );
 // Remove product from cart
 // створити ендпоінт для видалення продукту зі списку покупок користувача
-shoppintListRouter.delete(
-  "/shopping-list",
+shoppintListRouter.patch(
+  "/shopping-list/remove",
   authenticate,
   shoppingListController.deleteShopping
 );

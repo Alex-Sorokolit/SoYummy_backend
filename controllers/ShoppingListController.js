@@ -7,73 +7,166 @@ const Ingredient = require("../models/ingredientsModels");
 const { User } = require("../models/user");
 
 class ShoppingListController {
-  async addShoppingList(req, res) {
+  async addToShoppingList(req, res) {
+    // Отримуємо id користувача
     const { _id: userId } = req.user;
-    const { _id: ingredientId } = req.body;
-    const ingredient = await Ingredient.findById(ingredientId);
-    // console.log("ingredient", ingredient);
+
+    // отримуємо інгредієнт від користувача
+    const { _id, measure } = req.body;
+    // const { shoppingList } = req.body;
+    const ingredient = { _id, measure };
+    // console.log(ingredient);
+
+    // Перевіряємо чи передані всі дані
+    if (!_id || !measure) {
+      res.status(400);
+      throw new Error("Controller: Please provide all required fields");
+    }
+    // Оновлюємо користувача
+    // якщо потрібно щоб id не могли дублюватись використовуємо $addToSet: замість $push:
+    const result = await User.findByIdAndUpdate(
+      userId,
+      { $push: { shoppingList: ingredient } },
+      { new: true }
+    );
+    // Якщо не вдалось записати викидаємо помилку
+    if (!result) {
+      res.status(400);
+      throw new Error("Bad Request");
+    }
+    // Якщо вдалося записати повертаємо результат
+    res.status(200).json({
+      code: 200,
+      message: "success",
+      data: result.shoppingList,
+    });
+  }
+  // async deleteShopping(req, res) {
+  //   const { _id: userId } = req.user;
+  //   // отримуємо інгредієнт від користувача
+  //   const { _id: ingredientId, measure: ingredientMeasure } = req.body;
+
+  //   if (!ingredientId || !ingredientMeasure) {
+  //     res.status(400);
+  //     throw new Error("Controller: Please provide all required fields");
+  //   }
+
+  //   // Шукаємо інгредієнт у списку по id і по measure
+  //   const ingredient = await User.findOne(
+  //     {
+  //       _id: userId,
+  //       shoppingList: {
+  //         $elemMatch: { _id: ingredientId, measure: ingredientMeasure },
+  //       },
+  //     },
+  //     {
+  //       shoppingList: {
+  //         $elemMatch: { _id: ingredientId, measure: ingredientMeasure },
+  //       },
+  //     }
+  //   );
+
+  //   // Якщо не знайшли, викидаємо помилку
+  //   if (!ingredient) {
+  //     res.status(404);
+  //     throw new Error("Ingredient not found in shopping list");
+  //   }
+
+  //   // Якщо знайшли, видаляємо
+  //   const result = await User.findByIdAndUpdate(
+  //     userId,
+  //     {
+  //       $pull: {
+  //         shoppingList: { _id: ingredientId, measure: ingredientMeasure },
+  //       },
+  //     },
+  //     { new: true }
+  //   );
+
+  //   // повертаємо результат
+  //   res
+  //     .status(200)
+  //     .json({
+  //       code: 200,
+  //       message: "success",
+  //       data: result.shoppingList,
+  //     })
+  //     .setHeader("Cache-Control", "no-cache");
+  // }
+  async deleteShopping(req, res) {
+    const { _id: userId } = req.user;
+    const { _id: ingredientId, measure: ingredientMeasure } = req.body;
+
+    if (!ingredientId || !ingredientMeasure) {
+      res.status(400);
+      throw new Error("Controller: Please provide all required fields");
+    }
+
+    // Шукаємо інгредієнт у списку по id і по measure
+    const ingredient = await User.findOne(
+      {
+        _id: userId,
+        shoppingList: {
+          $elemMatch: { _id: ingredientId, measure: ingredientMeasure },
+        },
+      },
+      {
+        shoppingList: {
+          $elemMatch: { _id: ingredientId, measure: ingredientMeasure },
+        },
+      }
+    );
+
+    // Якщо не знайшли, повертаємо порожній масив або об'єкт з помилкою
     if (!ingredient) {
       return res.status(404).json({
         code: 404,
-        message: "Ingredient not found",
+        message: "Ingredient not found in shopping list",
+        data: [],
       });
     }
 
-    const updatedUser = await User.findOneAndUpdate(
+    // Якщо знайшли, видаляємо
+    const result = await User.findByIdAndUpdate(
       userId,
-      { $push: { shoppingList: ingredientId } },
+      {
+        $pull: {
+          shoppingList: { _id: ingredientId, measure: ingredientMeasure },
+        },
+      },
       { new: true }
     );
 
+    // повертаємо результат
     res.status(200).json({
       code: 200,
-      message: "Ingredients have been added to shopping list",
-      data: updatedUser.shoppingList,
+      message: "success",
+      data: result.shoppingList,
     });
   }
 
   async getShopping(req, res) {
+    // Отримуємо id користувача
     const { _id: userId } = req.user;
+    console.log(userId);
 
-    const user = await User.findById(userId).populate({
-      path: "shoppingList",
+    // Шукаємо користувача по id і заповнюємо інгредієнти об'єктами
+    const result = await User.findById(userId).populate({
+      path: "shoppingList._id",
       model: "Ingredient",
     });
 
-    const shoppingUpdate = user.shoppingList;
-
-    if (!shoppingUpdate) {
-      res.json({
-        message: "No ingredient have been added yet",
-      });
+    // Якщо користувача не знайшли викидаємо помилку
+    if (!result) {
+      res.status(404);
+      throw new Error(`User not found`);
     }
 
+    // Якщо користувача знайшли повертаємо результат
     res.status(200).json({
       code: 200,
-      message: "Our ingredients",
-      data: shoppingUpdate,
-      quantity: shoppingUpdate.length,
-    });
-  }
-
-  async deleteShopping(req, res) {
-    const { _id: userId } = req.user;
-    const { _id: ingredientId } = req.body;
-
-    const updateUser = await User.findByIdAndUpdate(
-      userId,
-      { $pull: { shoppingList: ingredientId } },
-      { new: true }
-    ).populate("shoppingList");
-    if (!ingredientId) {
-      res.json({
-        message: "There is no such ingredient here anymore",
-      });
-    }
-    res.status(200).json({
-      code: 200,
-      message: "The ingredient has been removed from the shopping list ",
-      data: updateUser.shoppingList,
+      message: "success",
+      data: result,
     });
   }
 }
@@ -81,7 +174,7 @@ class ShoppingListController {
 const shoppingCtrl = new ShoppingListController();
 
 module.exports = {
-  addShoppingList: asyncHandler(shoppingCtrl.addShoppingList),
+  addToShoppingList: asyncHandler(shoppingCtrl.addToShoppingList),
   getShopping: asyncHandler(shoppingCtrl.getShopping),
   deleteShopping: asyncHandler(shoppingCtrl.deleteShopping),
 };

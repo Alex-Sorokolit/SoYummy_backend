@@ -1,7 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
-const dotenv = require("dotenv");
 const connectDb = require("./config/db");
 const authRouter = require("./routes/authRoutes");
 const recipesRouter = require("./routes/recipesRoutes");
@@ -15,9 +13,6 @@ const favoritesRouter = require("./routes/favoritesRoutes");
 
 require("colors");
 require("dotenv").config();
-// отримуємо шлях до файлу .env
-// const configPath = path.join(__dirname, "config", ".env");
-// dotenv.config({ path: configPath });
 
 // створення сервера
 const app = express();
