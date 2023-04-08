@@ -41,26 +41,28 @@ class ShoppingListController {
     });
   }
   async getShopping(req, res) {
+    // Отримуємо id користувача
     const { _id: userId } = req.user;
-
-    const user = await User.findById(userId).populate({
-      path: "shoppingList",
+    console.log(userId);
+    // Шукаємо користувача по id і заповнюємо інгредієнти об'єктами
+    // const result = await User.findById(userId);
+    const result = await User.findById(userId).populate({
+      path: "shoppingList._id",
       model: "Ingredient",
     });
+    console.log(result);
+    // Якщо користувача не знайшли викидаємо помилку
 
-    const shoppingUpdate = user.shoppingList;
-
-    if (!shoppingUpdate) {
-      res.json({
-        message: "No ingredient have been added yet",
-      });
+    if (!result) {
+      res.status(404);
+      throw new Error(`User not found`);
     }
 
+    // Якщо користувача знайшли повертаємо результат
     res.status(200).json({
       code: 200,
-      message: "Our ingredients",
-      data: shoppingUpdate,
-      quantity: shoppingUpdate.length,
+      message: "success",
+      data: result,
     });
   }
 
