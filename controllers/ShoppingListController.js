@@ -15,19 +15,29 @@ class ShoppingListController {
     const { _id, measure } = req.body;
     // const { shoppingList } = req.body;
     const ingredient = { _id, measure };
-    console.log(ingredient);
+    // console.log(ingredient);
     // Перевіряємо чи передані всі дані
     if (!_id || !measure) {
       res.status(400);
       throw new Error("Controller: Please provide all required fields");
     }
     // Оновлюємо користувача
-    const result = await User.findByIdAndUpdate(userId, {
-      shoppingList: ingredient,
-    });
-    console.log(result);
+    const result = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { shoppingList: ingredient } },
+      { new: true }
+    );
     // Якщо не вдалось записати викидаємо помилку
+    if (!result) {
+      res.status(400);
+      throw new Error("Bad Request");
+    }
     // Якщо вдалося записати повертаємо результат
+    res.status(200).json({
+      code: 200,
+      message: "success",
+      data: result.shoppingList,
+    });
   }
   async getShopping(req, res) {
     const { _id: userId } = req.user;
@@ -82,3 +92,81 @@ module.exports = {
   getShopping: asyncHandler(shoppingCtrl.getShopping),
   deleteShopping: asyncHandler(shoppingCtrl.deleteShopping),
 };
+
+/* 
+{
+  "ingredients": [
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e3719"
+      },
+      "measure": "4"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e36e8"
+      },
+      "measure": "1 inch"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e36e3"
+      },
+      "measure": "8 cloves"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e373f"
+      },
+      "measure": "1.5 tsp"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e36b8"
+      },
+      "measure": "1 tsp"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e3782"
+      },
+      "measure": "½ tsp"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e36a6"
+      },
+      "measure": "To your taste"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e3683"
+      },
+      "measure": "2"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e3774"
+      },
+      "measure": "1 tbsp"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e3777"
+      },
+      "measure": "2 marble sized"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e378e"
+      },
+      "measure": "2.5 tbsp"
+    },
+    {
+      "_id": {
+        "$oid": "640c2dd963a319ea671e372b"
+      },
+      "measure": "for frying"
+    }
+  ]
+} */
