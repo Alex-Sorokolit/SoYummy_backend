@@ -41,58 +41,6 @@ class ShoppingListController {
       data: result.shoppingList,
     });
   }
-  // async deleteShopping(req, res) {
-  //   const { _id: userId } = req.user;
-  //   // отримуємо інгредієнт від користувача
-  //   const { _id: ingredientId, measure: ingredientMeasure } = req.body;
-
-  //   if (!ingredientId || !ingredientMeasure) {
-  //     res.status(400);
-  //     throw new Error("Controller: Please provide all required fields");
-  //   }
-
-  //   // Шукаємо інгредієнт у списку по id і по measure
-  //   const ingredient = await User.findOne(
-  //     {
-  //       _id: userId,
-  //       shoppingList: {
-  //         $elemMatch: { _id: ingredientId, measure: ingredientMeasure },
-  //       },
-  //     },
-  //     {
-  //       shoppingList: {
-  //         $elemMatch: { _id: ingredientId, measure: ingredientMeasure },
-  //       },
-  //     }
-  //   );
-
-  //   // Якщо не знайшли, викидаємо помилку
-  //   if (!ingredient) {
-  //     res.status(404);
-  //     throw new Error("Ingredient not found in shopping list");
-  //   }
-
-  //   // Якщо знайшли, видаляємо
-  //   const result = await User.findByIdAndUpdate(
-  //     userId,
-  //     {
-  //       $pull: {
-  //         shoppingList: { _id: ingredientId, measure: ingredientMeasure },
-  //       },
-  //     },
-  //     { new: true }
-  //   );
-
-  //   // повертаємо результат
-  //   res
-  //     .status(200)
-  //     .json({
-  //       code: 200,
-  //       message: "success",
-  //       data: result.shoppingList,
-  //     })
-  //     .setHeader("Cache-Control", "no-cache");
-  // }
   async deleteShopping(req, res) {
     const { _id: userId } = req.user;
     const { _id: ingredientId, measure: ingredientMeasure } = req.body;
@@ -148,7 +96,7 @@ class ShoppingListController {
   async getShopping(req, res) {
     // Отримуємо id користувача
     const { _id: userId } = req.user;
-    console.log(userId);
+    // console.log(userId);
 
     // Шукаємо користувача по id і заповнюємо інгредієнти об'єктами
     const result = await User.findById(userId).populate({

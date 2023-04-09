@@ -1,5 +1,6 @@
 const { Recipe } = require("../models/recipeModels");
 const asyncHandler = require("express-async-handler");
+const cloudinary = require("cloudinary").v2;
 
 class OwnRecipesController {
   // Add ownRecipe
@@ -21,7 +22,6 @@ class OwnRecipesController {
 
     // дістаємо id із об'єкта запиту і перейменовуємо в owner
     const { _id: owner } = req.user;
-
     const newRecipe = await Recipe.create({ ...req.body, owner });
 
     if (!newRecipe) {
@@ -32,6 +32,20 @@ class OwnRecipesController {
       code: 201,
       message: "success",
       data: newRecipe,
+    });
+  }
+  // Add Image
+  async addImage(req, res) {
+    if (!req.file) {
+      res.status(400);
+      throw new Error("Controller: Image require");
+    }
+    const { path: filePath } = req.file;
+
+    res.status(201).json({
+      code: 201,
+      message: "success",
+      data: filePath,
     });
   }
 
@@ -66,7 +80,7 @@ class OwnRecipesController {
       throw new Error("Controller: Recipe not found");
     }
 
-    res.json({
+    res.status(200).json({
       status: "success",
       code: 200,
       message: "Recipe deleted",
@@ -99,6 +113,7 @@ const ownRecipeCtrl = new OwnRecipesController();
 
 module.exports = {
   addRecipe: asyncHandler(ownRecipeCtrl.addRecipe),
+  addImage: asyncHandler(ownRecipeCtrl.addImage),
   removeRecipe: asyncHandler(ownRecipeCtrl.removeRecipe),
   getAllOwnRecipes: asyncHandler(ownRecipeCtrl.getAllOwnRecipes),
 };
