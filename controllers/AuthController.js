@@ -164,6 +164,10 @@ class AuthController {
   async updateAvatar(req, res) {
     const { _id: id } = req.user;
 
+    if (!req.file) {
+      res.status(400);
+      throw new Error("Controller: Image require");
+    }
     const { path } = req.file;
 
     await User.findByIdAndUpdate(id, { avatarURL: path });
