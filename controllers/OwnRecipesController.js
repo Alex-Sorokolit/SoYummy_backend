@@ -41,24 +41,12 @@ class OwnRecipesController {
       throw new Error("Controller: Image require");
     }
     const { path: filePath } = req.file;
-    // console.log("file:", filePath);
 
-    const uploadResult = await cloudinary.uploader.upload(filePath, {
-      eager: [
-        { width: 700, height: 700, crop: "fill" },
-        { width: 350, height: 350, crop: "fill" },
-      ],
-      overwrite: true, // додали прапорець overwrite
+    res.status(201).json({
+      code: 201,
+      message: "success",
+      data: filePath,
     });
-    const { secure_url: thumb } = uploadResult.eager[0];
-    const { secure_url: preview } = uploadResult.eager[1];
-
-    if (!uploadResult) {
-      res.status(500);
-      throw new Error("Controller: Server error");
-    }
-
-    res.json({ thumb, preview });
   }
 
   // Remove ownRecipe
@@ -92,7 +80,7 @@ class OwnRecipesController {
       throw new Error("Controller: Recipe not found");
     }
 
-    res.json({
+    res.status(200).json({
       status: "success",
       code: 200,
       message: "Recipe deleted",
