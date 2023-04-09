@@ -97,10 +97,13 @@ class AuthController {
 
     await User.findByIdAndUpdate(user._id, { token });
 
-    res.json({
+    res.status(200).json({
       token,
       user: {
         email,
+        name: user.name,
+        avatar: user.avatarURL,
+        createDate: user.createdAt,
       },
     });
   }
@@ -108,7 +111,16 @@ class AuthController {
   async getCurrent(req, res) {
     const { email } = req.user;
 
-    res.json({ email });
+    const user = await User.findOne({ email });
+
+    res.json({
+      user: {
+        email,
+        name: user.name,
+        avatar: user.avatarURL,
+        createDate: user.createdAt,
+      },
+    });
   }
 
   async logout(req, res) {
