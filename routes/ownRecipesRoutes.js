@@ -4,13 +4,14 @@ const {
   validateBody,
   authenticate,
   isValidId,
-  upload,
+  imageUpload,
 } = require("../middlewares");
 const { schemas } = require("../models/recipeModels");
 const {
   addRecipe,
   removeRecipe,
   getAllOwnRecipes,
+  addImage,
 } = require("../controllers/OwnRecipesController");
 
 const ownRecipesRouter = express.Router();
@@ -20,8 +21,15 @@ ownRecipesRouter.post(
   "/own-recipes",
   validateBody(schemas.recipeJoiSchema),
   authenticate,
-  upload.single("thumb"),
   addRecipe
+);
+// Add image
+// "image" це поле у формі куди передавати зображення
+ownRecipesRouter.patch(
+  "/own-recipes/upload",
+  authenticate,
+  imageUpload.single("image"),
+  addImage
 );
 // ми очікуємо в полі thumb один файл, всі інші поля будуть текстовими, їх треба записати в req.body
 // Remove own recipe

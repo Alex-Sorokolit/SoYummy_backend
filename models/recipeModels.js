@@ -126,43 +126,14 @@ module.exports = {
   schemas,
 };
 
-// const recipe = await Recipe.aggregate([
+// [
 //   {
-//     $match: {
-//       _id: ObjectId("640cd5ac2d9fecf12e8897f5"),
-//     },
+//     $_id: "640c2dd963a319ea671e36e9",
+
+//     measure: "1 tbsp",
 //   },
 //   {
-//     $lookup: {
-//       from: "ingredients",
-//       localField: "ingredients.id",
-//       foreignField: "_id",
-//       as: "ingr_nfo",
-//     },
+//     _id: "640c2dd963a319ea671e3722",
+//     measure: "sprigs of fresh",
 //   },
-//   {
-//     $set: {
-//       ingredients: {
-//         $map: {
-//           input: "$ingredients",
-//           in: {
-//             $mergeObjects: [
-//               "$$this",
-//               {
-//                 $arrayElemAt: [
-//                   "$ingr_nfo",
-//                   {
-//                     $indexOfArray: ["$ingr_nfo._id", "$$this.id"],
-//                   },
-//                 ],
-//               },
-//             ],
-//           },
-//         },
-//       },
-//     },
-//   },
-//   {
-//     $unset: ["ingr_nfo", "ingredients.id"],
-//   },
-// ]).pretty();
+// ];

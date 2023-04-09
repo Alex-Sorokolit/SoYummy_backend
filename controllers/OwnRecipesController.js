@@ -1,5 +1,6 @@
 const { Recipe } = require("../models/recipeModels");
 const asyncHandler = require("express-async-handler");
+const cloudinary = require("cloudinary").v2;
 
 class OwnRecipesController {
   // Add ownRecipe
@@ -21,7 +22,6 @@ class OwnRecipesController {
 
     // дістаємо id із об'єкта запиту і перейменовуємо в owner
     const { _id: owner } = req.user;
-
     const newRecipe = await Recipe.create({ ...req.body, owner });
 
     if (!newRecipe) {
@@ -33,6 +33,32 @@ class OwnRecipesController {
       message: "success",
       data: newRecipe,
     });
+  }
+  // Add Image
+  async addImage(req, res) {
+    if (!req.file) {
+      res.status(400);
+      throw new Error("Controller: Image require");
+    }
+    const { path: filePath } = req.file;
+    // console.log("file:", filePath);
+
+    const uploadResult = await cloudinary.uploader.upload(filePath, {
+      eager: [
+        { width: 700, height: 700, crop: "fill" },
+        { width: 350, height: 350, crop: "fill" },
+      ],
+      overwrite: true, // додали прапорець overwrite
+    });
+    const { secure_url: thumb } = uploadResult.eager[0];
+    const { secure_url: preview } = uploadResult.eager[1];
+
+    if (!uploadResult) {
+      res.status(500);
+      throw new Error("Controller: Server error");
+    }
+
+    res.json({ thumb, preview });
   }
 
   // Remove ownRecipe
@@ -99,6 +125,7 @@ const ownRecipeCtrl = new OwnRecipesController();
 
 module.exports = {
   addRecipe: asyncHandler(ownRecipeCtrl.addRecipe),
+  addImage: asyncHandler(ownRecipeCtrl.addImage),
   removeRecipe: asyncHandler(ownRecipeCtrl.removeRecipe),
   getAllOwnRecipes: asyncHandler(ownRecipeCtrl.getAllOwnRecipes),
 };
