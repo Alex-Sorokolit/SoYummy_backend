@@ -96,7 +96,6 @@ class ShoppingListController {
   async getShopping(req, res) {
     // Отримуємо id користувача
     const { _id: userId } = req.user;
-    // console.log(userId);
 
     // Шукаємо користувача по id і заповнюємо інгредієнти об'єктами
     const result = await User.findById(userId).populate({

@@ -13,7 +13,6 @@ cloudinary.config({
   api_key: API_KEY,
   api_secret: API_SECRET,
   secure: true,
-  // public_id: (req, file) => `${Date.now()}-${file.originalname}`,
 });
 
 const storage = new CloudinaryStorage({
@@ -21,10 +20,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "recipes",
     allowed_formats: ["jpg", "jpeg", "png"],
-    transformation: [
-      { width: 700, height: 700, crop: "fill" },
-      //   { width: 350, height: 350, crop: "fill" },
-    ],
+    transformation: [{ width: 700, height: 700, crop: "fill" }],
   },
 });
 

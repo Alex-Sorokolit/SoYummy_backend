@@ -125,15 +125,3 @@ module.exports = {
   Recipe,
   schemas,
 };
-
-// [
-//   {
-//     $_id: "640c2dd963a319ea671e36e9",
-
-//     measure: "1 tbsp",
-//   },
-//   {
-//     _id: "640c2dd963a319ea671e3722",
-//     measure: "sprigs of fresh",
-//   },
-// ];
