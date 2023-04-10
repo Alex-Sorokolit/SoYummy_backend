@@ -12,7 +12,7 @@ const ingredientSchema = Schema(
     t: {
       type: String,
     },
-    tnd: {
+    thb: {
       type: String,
       required: [true, "db: tnd is required"],
     },

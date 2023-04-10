@@ -19,7 +19,11 @@ class FavoritesController {
       userId,
       { $addToSet: { favorites: recipeId } },
       { new: true }
-    );
+    ).populate({
+      path: "favorites",
+      model: "Recipe",
+      options: { sort: { createdAt: -1 }, limit: 1 },
+    });
 
     res.status(201).json({
       code: 201,
