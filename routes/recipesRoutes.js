@@ -10,15 +10,15 @@ const {
 const recipesRouter = express.Router();
 
 // Get category-list
-recipesRouter.get("/recipes/category-list", getCattegory);
+recipesRouter.get("/recipes/category-list", authenticate, getCattegory);
 
 // Get main-page recipes by category
-recipesRouter.get("/recipes/main-page", getForMain);
+recipesRouter.get("/recipes/main-page", authenticate, getForMain);
 
 // Get 8 recipes by category
-recipesRouter.get("/recipes/category/:category", getForCategory);
+recipesRouter.get("/recipes/category/:category", authenticate, getForCategory);
 
 // Get recipe by ID
-recipesRouter.get("/recipes/:id", isValidId, getOne);
+recipesRouter.get("/recipes/:id", authenticate, isValidId, getOne);
 
 module.exports = recipesRouter;
