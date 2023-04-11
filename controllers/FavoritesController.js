@@ -13,7 +13,7 @@ class FavoritesController {
         message: "Missing recipe ID in request body",
       });
     }
-
+  
     const recipe = await Recipe.findById(recipeId);
     if (!recipe) {
       return res.status(404).json({
@@ -21,23 +21,22 @@ class FavoritesController {
         message: "Recipe not found",
       });
     }
-
+  
+    // Оновлення списку улюблених рецептів користувача
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $addToSet: { favorites: recipeId } },
       { new: true, upsert: true }
-    ).populate({
-      path: "favorites",
-      model: "Recipe",
-      options: { sort: { createdAt: 1 }, limit: 1 },
-    });
-
+    )
+    // Відправлення відповіді з останнім доданим рецептом
     res.status(201).json({
       code: 201,
       message: "success",
-      data: updatedUser.favorites[updatedUser.favorites.length - 1],
+      // Виводимо останній доданий рецепт
+      data: recipe,
     });
   }
+  
   async getFavorites(req, res) {
     const { _id: userId } = req.user;
 
