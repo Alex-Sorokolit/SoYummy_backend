@@ -7,6 +7,13 @@ class FavoritesController {
   async addFavorites(req, res) {
     const { _id: userId } = req.user;
     const { _id: recipeId } = req.body;
+    if (!recipeId) {
+      return res.status(422).json({
+        code: 422,
+        message: "Missing recipe ID in request body",
+      });
+    }
+
     const recipe = await Recipe.findById(recipeId);
     if (!recipe) {
       return res.status(404).json({
@@ -18,17 +25,17 @@ class FavoritesController {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $addToSet: { favorites: recipeId } },
-      { new: true }
+      { new: true, upsert: true }
     ).populate({
       path: "favorites",
       model: "Recipe",
-      options: { sort: { createdAt: -1 }, limit: 1 },
+      options: { sort: { createdAt: 1 }, limit: 1 },
     });
 
     res.status(201).json({
       code: 201,
       message: "success",
-      data: updatedUser.favorites,
+      data: updatedUser.favorites[updatedUser.favorites.length - 1],
     });
   }
   async getFavorites(req, res) {
