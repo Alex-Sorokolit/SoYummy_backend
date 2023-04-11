@@ -5,7 +5,6 @@ const cloudinary = require("cloudinary").v2;
 class OwnRecipesController {
   // Add ownRecipe
   async addRecipe(req, res) {
-    // console.log(req.body);
     const { title, instructions, description, category, time, ingredients } =
       req.body;
     if (
