@@ -1,5 +1,3 @@
-const asyncHandler = require("express-async-handler");
-
 const { Recipe } = require("../models/recipe");
 const { User } = require("../models/user");
 
@@ -84,8 +82,4 @@ class FavoritesController {
 
 const favoritesCtrl = new FavoritesController();
 
-module.exports = {
-  addFavorites: asyncHandler(favoritesCtrl.addFavorites),
-  getFavorites: asyncHandler(favoritesCtrl.getFavorites),
-  deleteFavorites: asyncHandler(favoritesCtrl.deleteFavorites),
-};
+module.exports = favoritesCtrl;
