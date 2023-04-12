@@ -86,7 +86,10 @@ class AuthController {
     const passwordCompare = await bcrypt.compare(password, user.password);
 
     if (!passwordCompare) {
-      throw HttpError(401, "Email or password invalid");
+      res.status(401).json({
+        message: "Email or password invalid",
+      });
+      return;
     }
 
     const payload = {
@@ -150,6 +153,19 @@ class AuthController {
     const { _id: id } = req.user;
 
     const data = req.body;
+
+    if (data.email) {
+      const { email } = data;
+
+      const user = await User.findOne({ email });
+
+      if (user) {
+        res.status(400).json({
+          message: "This password already exists",
+        });
+        return;
+      }
+    }
 
     if (data.password) {
       const hashPassword = await bcrypt.hash(data.password, 10);
