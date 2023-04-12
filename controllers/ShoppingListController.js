@@ -1,5 +1,3 @@
-const asyncHandler = require("express-async-handler");
-const Ingredient = require("../models/ingredient");
 const { User } = require("../models/user");
 
 class ShoppingListController {
@@ -46,7 +44,7 @@ class ShoppingListController {
       throw new Error("Controller: Please provide all required fields");
     }
 
-    // Шукаємо інгредієнт у списку по id і по measure
+    // Шукаємо інгредієнт у списку по id і по measure, повертаємо поля _id та measure
     const ingredient = await User.findOne(
       {
         _id: userId,
@@ -116,8 +114,10 @@ class ShoppingListController {
 
 const shoppingCtrl = new ShoppingListController();
 
-module.exports = {
-  addToShoppingList: asyncHandler(shoppingCtrl.addToShoppingList),
-  getShopping: asyncHandler(shoppingCtrl.getShopping),
-  deleteShopping: asyncHandler(shoppingCtrl.deleteShopping),
-};
+// module.exports = {
+//   addToShoppingList: asyncHandler(shoppingCtrl.addToShoppingList),
+//   getShopping: asyncHandler(shoppingCtrl.getShopping),
+//   deleteShopping: asyncHandler(shoppingCtrl.deleteShopping),
+// };
+
+module.exports = shoppingCtrl;
