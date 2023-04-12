@@ -95,13 +95,16 @@ class ShoppingListController {
     const { _id: userId } = req.user;
 
     // Шукаємо користувача по id і заповнюємо інгредієнти об'єктами
-    const result = await User.findById(userId).populate({
-      path: "shoppingList._id",
-      model: "Ingredient",
-    });
+    const result = await User.findById(userId)
+      .populate({
+        path: "shoppingList._id",
+        model: "Ingredient",
+      })
+      .lean();
+    const ingredients = result.shoppingList.map((item) => item._id);
 
     // Якщо користувача не знайшли викидаємо помилку
-    if (!result) {
+    if (!ingredients) {
       res.status(404);
       throw new Error(`User not found`);
     }
@@ -110,7 +113,7 @@ class ShoppingListController {
     res.status(200).json({
       code: 200,
       message: "success",
-      data: result,
+      data: ingredients,
     });
   }
 }
