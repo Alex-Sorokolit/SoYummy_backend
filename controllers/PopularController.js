@@ -1,5 +1,4 @@
 const { Recipe } = require("../models/recipe");
-const asyncHandler = require("express-async-handler");
 
 class PopularController {
   async getPopular(req, res) {
@@ -11,6 +10,7 @@ class PopularController {
       { $unwind: "$favorites" },
       { $group: { _id: "$_id", count: { $sum: 1 } } },
     ]);
+
     // Зберігаємо результати у змінну recipeCounts
     results.forEach(({ _id, count }) => (recipeCounts[_id] = count));
 
@@ -18,6 +18,7 @@ class PopularController {
     const sortedRecipes = Object.entries(recipeCounts).sort(
       ([_, count1], [__, count2]) => count2 - count1
     );
+
     // Вибираємо найпопулярніші рецепти
     const popularRecipes = await Recipe.find()
       .where("_id")
@@ -38,6 +39,4 @@ class PopularController {
 
 const popularCtrl = new PopularController();
 
-module.exports = {
-  getPopular: asyncHandler(popularCtrl.getPopular),
-};
+module.exports = popularCtrl;

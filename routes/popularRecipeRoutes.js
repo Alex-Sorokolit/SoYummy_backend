@@ -1,14 +1,19 @@
 //http://localhost:5000/api/v1/popular-recipe
 const express = require("express");
+const asyncHandler = require("express-async-handler");
+const { authenticate } = require("../middlewares");
 
-// const { authenticate } = require("../middlewares");
-const { getPopular } = require("../controllers/PopularController");
+const {
+  popularCtrl: { getPopular },
+} = require("../controllers");
 
 const popularRecipeRouter = express.Router();
 
 // Add to favorite
-//  створити ендпоінт на отримання популярних рецептів.
-// Популярність вираховується по тому, як багато користувачей додали рецепт у вибрані.
-popularRecipeRouter.get("/popular-recipes", getPopular);
+popularRecipeRouter.get(
+  "/popular-recipes",
+  authenticate,
+  asyncHandler(getPopular)
+);
 
 module.exports = popularRecipeRouter;
