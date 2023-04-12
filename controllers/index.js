@@ -1,5 +1,6 @@
 const controllers = require("./AuthController");
 const recipeCtrl = require("./RecipesController");
+const ownRecipeCtrl = require("./OwnRecipesController");
 module.exports = {
   register: controllers.register,
   login: controllers.login,
@@ -11,4 +12,5 @@ module.exports = {
   subscription: controllers.subscription,
   googleAuth: controllers.googleAuth,
   recipeCtrl,
+  ownRecipeCtrl,
 };

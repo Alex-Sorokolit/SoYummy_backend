@@ -1,5 +1,4 @@
 const { Recipe } = require("../models/recipe");
-const asyncHandler = require("express-async-handler");
 
 class OwnRecipesController {
   // Add ownRecipe
@@ -109,9 +108,11 @@ class OwnRecipesController {
 
 const ownRecipeCtrl = new OwnRecipesController();
 
-module.exports = {
-  addRecipe: asyncHandler(ownRecipeCtrl.addRecipe),
-  addImage: asyncHandler(ownRecipeCtrl.addImage),
-  removeRecipe: asyncHandler(ownRecipeCtrl.removeRecipe),
-  getAllOwnRecipes: asyncHandler(ownRecipeCtrl.getAllOwnRecipes),
-};
+// module.exports = {
+//   addRecipe: asyncHandler(ownRecipeCtrl.addRecipe),
+//   addImage: asyncHandler(ownRecipeCtrl.addImage),
+//   removeRecipe: asyncHandler(ownRecipeCtrl.removeRecipe),
+//   getAllOwnRecipes: asyncHandler(ownRecipeCtrl.getAllOwnRecipes),
+// };
+
+module.exports = ownRecipeCtrl;

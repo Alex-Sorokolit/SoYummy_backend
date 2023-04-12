@@ -1,18 +1,16 @@
 //http://localhost:5000/api/v1/ownrecipes
 const express = require("express");
+const asyncHandler = require("express-async-handler");
+const { schemas } = require("../models/recipe");
 const {
   validateBody,
   authenticate,
   isValidId,
   imageUpload,
 } = require("../middlewares");
-const { schemas } = require("../models/recipe");
 const {
-  addRecipe,
-  removeRecipe,
-  getAllOwnRecipes,
-  addImage,
-} = require("../controllers/OwnRecipesController");
+  ownRecipeCtrl: { addRecipe, removeRecipe, getAllOwnRecipes, addImage },
+} = require("../controllers");
 
 const ownRecipesRouter = express.Router();
 
@@ -21,24 +19,31 @@ ownRecipesRouter.post(
   "/own-recipes",
   validateBody(schemas.recipeJoiSchema),
   authenticate,
-  addRecipe
+  asyncHandler(addRecipe)
 );
+
 // Add image
-// "image" це поле у формі куди передавати зображення
+// "image" це поле у формі в яке передавати зображення
 ownRecipesRouter.patch(
   "/own-recipes/upload",
   authenticate,
   imageUpload.single("image"),
-  addImage
+  asyncHandler(addImage)
 );
-// ми очікуємо в полі thumb один файл, всі інші поля будуть текстовими, їх треба записати в req.body
+
 // Remove own recipe
 ownRecipesRouter.delete(
   "/own-recipes/:id",
   authenticate,
   isValidId,
-  removeRecipe
+  asyncHandler(removeRecipe)
 );
+
 // Get all recipes by user createt
-ownRecipesRouter.get("/own-recipes", authenticate, getAllOwnRecipes);
+ownRecipesRouter.get(
+  "/own-recipes",
+  authenticate,
+  asyncHandler(getAllOwnRecipes)
+);
+
 module.exports = ownRecipesRouter;
