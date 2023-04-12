@@ -108,11 +108,4 @@ class OwnRecipesController {
 
 const ownRecipeCtrl = new OwnRecipesController();
 
-// module.exports = {
-//   addRecipe: asyncHandler(ownRecipeCtrl.addRecipe),
-//   addImage: asyncHandler(ownRecipeCtrl.addImage),
-//   removeRecipe: asyncHandler(ownRecipeCtrl.removeRecipe),
-//   getAllOwnRecipes: asyncHandler(ownRecipeCtrl.getAllOwnRecipes),
-// };
-
 module.exports = ownRecipeCtrl;
