@@ -25,43 +25,47 @@ const {
 
 // Route from front-end when press btn for google registration
 authRouter.get(
-  "/google",
+  "/auth/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
 //When you choice your account, google use callback on this rout
 authRouter.get(
-  "/google/callback",
+  "/auth/google/callback",
   passport.authenticate("google", { session: false }),
   googleAuth
 );
 
 // Registration  (signup)
-authRouter.post("/register", validateBody(schemas.registerSchema), register);
+authRouter.post(
+  "/auth/register",
+  validateBody(schemas.registerSchema),
+  register
+);
 
 // LogIn (signin)
-authRouter.post("/login", validateBody(schemas.loginSchema), login);
+authRouter.post("/auth/login", validateBody(schemas.loginSchema), login);
 
 // Get current user
-authRouter.get("/current", authenticate, getCurrent);
+authRouter.get("/auth/current", authenticate, getCurrent);
 
 // Get info about user
-authRouter.get("/user/info", authenticate, getCurrentUser);
+authRouter.get("/auth/user/info", authenticate, getCurrentUser);
 
 // Update user fields
 authRouter.put(
-  "/user/update",
+  "/auth/user/update",
   authenticate,
   validateBody(schemas.updateUserSchema),
   updateUser
 );
 
 // LogOut
-authRouter.post("/logout", authenticate, logout);
+authRouter.post("/auth/logout", authenticate, logout);
 
 // Update users avatar
 authRouter.patch(
-  "/user/avatar",
+  "/auth/user/avatar",
   authenticate,
   upload.single("avatar"),
   updateAvatar
@@ -69,7 +73,7 @@ authRouter.patch(
 
 // Subscription
 authRouter.post(
-  "/subscription",
+  "/auth/subscription",
   authenticate,
   validateBody(schemas.subscriptionSchema),
   subscription

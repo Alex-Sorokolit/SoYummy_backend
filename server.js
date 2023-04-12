@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const connectDb = require("./config/db");
+const logger = require("morgan");
 const {
   authRouter,
   recipesRouter,
@@ -18,7 +19,8 @@ require("dotenv").config();
 // створення сервера
 const app = express();
 
-// middelwares ______________________________
+// middelwares ______________________________\
+app.use(logger("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -26,7 +28,7 @@ app.use(express.json());
 app.use(cors());
 
 // set routes ________________________________
-app.use("/api/v1/auth", authRouter);
+app.use("/api/v1", authRouter);
 app.use("/api/v1", recipesRouter);
 app.use("/api/v1", ownRecipesRouter);
 app.use("/api/v1", ingredientsRouter);

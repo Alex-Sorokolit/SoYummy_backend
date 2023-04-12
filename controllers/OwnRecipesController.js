@@ -1,6 +1,5 @@
 const { Recipe } = require("../models/recipe");
 const asyncHandler = require("express-async-handler");
-const cloudinary = require("cloudinary").v2;
 
 class OwnRecipesController {
   // Add ownRecipe
