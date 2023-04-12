@@ -1,6 +1,6 @@
 const { model, Schema } = require("mongoose");
 const Joi = require("joi");
-
+const { handleMongooseError } = require("../helpers");
 const categoriesList = [
   "Beef",
   "Breakfast",
@@ -70,6 +70,7 @@ const recipeSchema = Schema(
   },
   { versionKey: false, timestamps: true }
 );
+recipeSchema.post("save", handleMongooseError);
 
 // валідація Joy перевіряє тіло запиту
 const recipeJoiSchema = Joi.object({
