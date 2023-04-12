@@ -100,11 +100,10 @@ class ShoppingListController {
         path: "shoppingList._id",
         model: "Ingredient",
       })
-      .lean();
-    const ingredients = result.shoppingList.map((item) => item._id);
+      .select("shoppingList");
 
     // Якщо користувача не знайшли викидаємо помилку
-    if (!ingredients) {
+    if (!result) {
       res.status(404);
       throw new Error(`User not found`);
     }
@@ -113,7 +112,7 @@ class ShoppingListController {
     res.status(200).json({
       code: 200,
       message: "success",
-      data: ingredients,
+      data: result,
     });
   }
 }
