@@ -1,15 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const connectDb = require("./config/db");
-const authRouter = require("./routes/authRoutes");
-const recipesRouter = require("./routes/recipesRoutes");
-const ingredientsRouter = require("./routes/ingredientsRoutes");
-const searchRouter = require("./routes/searchRoutes");
-const shoppintListRouter = require("./routes/shoppintListRoutes");
-const popularRecipeRouter = require("./routes/popularRecipeRoutes");
-const ownRecipesRouter = require("./routes/ownRecipesRoutes");
-
-const favoritesRouter = require("./routes/favoritesRoutes");
+const {
+  authRouter,
+  recipesRouter,
+  ingredientsRouter,
+  searchRouter,
+  shoppintListRouter,
+  popularRecipeRouter,
+  ownRecipesRouter,
+  favoritesRouter,
+} = require("./routes");
 
 require("colors");
 require("dotenv").config();
@@ -25,14 +26,14 @@ app.use(express.json());
 app.use(cors());
 
 // set routes ________________________________
-app.use("/api/v1", recipesRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1", recipesRouter);
+app.use("/api/v1", ownRecipesRouter);
 app.use("/api/v1", ingredientsRouter);
 app.use("/api/v1", searchRouter);
 app.use("/api/v1", shoppintListRouter);
 app.use("/api/v1", favoritesRouter);
 app.use("/api/v1", popularRecipeRouter);
-app.use("/api/v1", ownRecipesRouter);
 
 // Catch Errors ______________________________
 // обробка помилки 404
