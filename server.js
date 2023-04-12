@@ -19,7 +19,7 @@ require("dotenv").config();
 // створення сервера
 const app = express();
 
-// middelwares ______________________________\
+// middelwares ______________________________
 app.use(logger("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

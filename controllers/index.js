@@ -1,5 +1,5 @@
 const controllers = require("./AuthController");
-
+const recipeCtrl = require("./RecipesController");
 module.exports = {
   register: controllers.register,
   login: controllers.login,
@@ -10,4 +10,5 @@ module.exports = {
   updateAvatar: controllers.updateAvatar,
   subscription: controllers.subscription,
   googleAuth: controllers.googleAuth,
+  recipeCtrl,
 };
