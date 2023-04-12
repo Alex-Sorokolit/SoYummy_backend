@@ -48,6 +48,13 @@ app.use("*", (req, res, next) => {
 
 // відловлювач всіх не передбачених помилок
 app.use((error, req, res, next) => {
+  if (error) {
+    const statusCode = error.status;
+    res
+      .status(statusCode)
+      .json({ code: res.statusCode, message: error.message });
+    return;
+  }
   const statusCode = res.statusCode || 500;
   res.status(statusCode).json({ code: res.statusCode, message: error.message });
 });
