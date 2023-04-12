@@ -4,8 +4,8 @@ const ingredientCtrl = require("./IngredientsController");
 const ownRecipeCtrl = require("./OwnRecipesController");
 const popularCtrl = require("./PopularController");
 const recipeCtrl = require("./RecipesController");
-const shoppingCtrl = require("./ShoppingListController");
 const searchCtrl = require("./SearchController");
+const shoppingCtrl = require("./ShoppingListController");
 
 module.exports = {
   authCtrl,
