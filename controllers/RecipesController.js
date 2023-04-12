@@ -1,6 +1,5 @@
-const { Recipe } = require("../models/recipeModels");
+const { Recipe } = require("../models/recipe");
 const categories = require("../data/categories");
-const asyncHandler = require("express-async-handler"); // дозволяє відловлювати помилки (модний try catch)
 
 class RecipesController {
   async getCattegory(req, res) {
@@ -75,9 +74,4 @@ class RecipesController {
 }
 const recipeCtrl = new RecipesController();
 
-module.exports = {
-  getCattegory: asyncHandler(recipeCtrl.getCattegory),
-  getForMain: asyncHandler(recipeCtrl.getForMain),
-  getForCategory: asyncHandler(recipeCtrl.getForCategory),
-  getOne: asyncHandler(recipeCtrl.getOne),
-};
+module.exports = recipeCtrl;

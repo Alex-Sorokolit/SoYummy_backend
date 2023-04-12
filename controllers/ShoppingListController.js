@@ -1,9 +1,3 @@
-// const mongoose = require("mongoose");
-// const ObjectId = require("mongoose").Types.ObjectId;
-
-const asyncHandler = require("express-async-handler");
-
-const Ingredient = require("../models/ingredientsModels");
 const { User } = require("../models/user");
 
 class ShoppingListController {
@@ -13,15 +7,14 @@ class ShoppingListController {
 
     // отримуємо інгредієнт від користувача
     const { _id, measure } = req.body;
-    // const { shoppingList } = req.body;
     const ingredient = { _id, measure };
-    // console.log(ingredient);
 
     // Перевіряємо чи передані всі дані
     if (!_id || !measure) {
       res.status(400);
       throw new Error("Controller: Please provide all required fields");
     }
+
     // Оновлюємо користувача
     // якщо потрібно щоб id не могли дублюватись використовуємо $addToSet: замість $push:
     const result = await User.findByIdAndUpdate(
@@ -29,11 +22,13 @@ class ShoppingListController {
       { $push: { shoppingList: ingredient } },
       { new: true }
     );
+
     // Якщо не вдалось записати викидаємо помилку
     if (!result) {
       res.status(400);
       throw new Error("Bad Request");
     }
+
     // Якщо вдалося записати повертаємо результат
     res.status(200).json({
       code: 200,
@@ -41,16 +36,18 @@ class ShoppingListController {
       data: result.shoppingList,
     });
   }
+
   async deleteShopping(req, res) {
     const { _id: userId } = req.user;
     const { _id: ingredientId, measure: ingredientMeasure } = req.body;
 
+    // Перевіряємо чи передані всі дані
     if (!ingredientId || !ingredientMeasure) {
       res.status(400);
       throw new Error("Controller: Please provide all required fields");
     }
 
-    // Шукаємо інгредієнт у списку по id і по measure
+    // Шукаємо інгредієнт у списку по id і по measure, повертаємо поля _id та measure
     const ingredient = await User.findOne(
       {
         _id: userId,
@@ -120,8 +117,4 @@ class ShoppingListController {
 
 const shoppingCtrl = new ShoppingListController();
 
-module.exports = {
-  addToShoppingList: asyncHandler(shoppingCtrl.addToShoppingList),
-  getShopping: asyncHandler(shoppingCtrl.getShopping),
-  deleteShopping: asyncHandler(shoppingCtrl.deleteShopping),
-};
+module.exports = shoppingCtrl;

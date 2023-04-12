@@ -4,7 +4,7 @@ const gravatar = require("gravatar");
 require("dotenv").config();
 const { User } = require("../models/user");
 
-const { ctrlWrapper, HttpError, sendEmail } = require("../helpers");
+const { HttpError, sendEmail } = require("../helpers");
 
 const subscribeLetter = require("../letters/subscribeLetter");
 
@@ -219,14 +219,4 @@ class AuthController {
 
 const authCtrl = new AuthController();
 
-module.exports = {
-  register: ctrlWrapper(authCtrl.register),
-  login: ctrlWrapper(authCtrl.login),
-  getCurrent: ctrlWrapper(authCtrl.getCurrent),
-  logout: ctrlWrapper(authCtrl.logout),
-  getCurrentUser: ctrlWrapper(authCtrl.getCurrentUser),
-  updateUser: ctrlWrapper(authCtrl.updateUser),
-  updateAvatar: ctrlWrapper(authCtrl.updateAvatar),
-  subscription: ctrlWrapper(authCtrl.subscription),
-  googleAuth: ctrlWrapper(authCtrl.googleAuth),
-};
+module.exports = authCtrl;

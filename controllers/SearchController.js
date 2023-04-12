@@ -1,6 +1,4 @@
-const { Recipe } = require("../models/recipeModels");
-const Ingredients = require("../models/ingredientsModels");
-const asyncHandler = require("express-async-handler");
+const { Recipe } = require("../models/recipe");
 
 class SearchController {
   async findByTitle(req, res) {
@@ -109,7 +107,4 @@ class SearchController {
 
 const searchCtrl = new SearchController();
 
-module.exports = {
-  findByTitle: asyncHandler(searchCtrl.findByTitle),
-  findByIngredient: asyncHandler(searchCtrl.findByIngredient),
-};
+module.exports = searchCtrl;

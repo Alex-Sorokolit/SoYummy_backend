@@ -1,6 +1,4 @@
-const { Recipe } = require("../models/recipeModels");
-const asyncHandler = require("express-async-handler");
-const cloudinary = require("cloudinary").v2;
+const { Recipe } = require("../models/recipe");
 
 class OwnRecipesController {
   // Add ownRecipe
@@ -110,9 +108,4 @@ class OwnRecipesController {
 
 const ownRecipeCtrl = new OwnRecipesController();
 
-module.exports = {
-  addRecipe: asyncHandler(ownRecipeCtrl.addRecipe),
-  addImage: asyncHandler(ownRecipeCtrl.addImage),
-  removeRecipe: asyncHandler(ownRecipeCtrl.removeRecipe),
-  getAllOwnRecipes: asyncHandler(ownRecipeCtrl.getAllOwnRecipes),
-};
+module.exports = ownRecipeCtrl;

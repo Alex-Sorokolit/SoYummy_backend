@@ -1,31 +1,32 @@
 //http://localhost:5000/api/v1/shopping-list
 const express = require("express");
-const shoppingListController = require("../controllers/ShoppingListController");
-
+const asyncHandler = require("express-async-handler");
 const { authenticate } = require("../middlewares");
+const {
+  shoppingCtrl: { addToShoppingList, deleteShopping, getShopping },
+} = require("../controllers");
 
 const shoppintListRouter = express.Router();
 
 // Add product to cart
-//  створити ендпоінт для додавання продукту в список покупок користувача
 shoppintListRouter.patch(
   "/shopping-list/add",
   authenticate,
-  shoppingListController.addToShoppingList
+  asyncHandler(addToShoppingList)
 );
+
 // Remove product from cart
-// створити ендпоінт для видалення продукту зі списку покупок користувача
 shoppintListRouter.patch(
   "/shopping-list/remove",
   authenticate,
-  shoppingListController.deleteShopping
+  asyncHandler(deleteShopping)
 );
+
 // Get products list
-// створити ендпоінт для отримання продуктів зі списку покупок користувача
 shoppintListRouter.get(
   "/shopping-list",
   authenticate,
-  shoppingListController.getShopping
+  asyncHandler(getShopping)
 );
 
 module.exports = shoppintListRouter;

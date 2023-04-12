@@ -1,14 +1,22 @@
 //http://localhost:5000/api/v1/search
 const express = require("express");
+const asyncHandler = require("express-async-handler");
+const { authenticate } = require("../middlewares");
+
 const {
-  findByTitle,
-  findByIngredient,
-} = require("../controllers/SearchController");
+  searchCtrl: { findByTitle, findByIngredient },
+} = require("../controllers");
+
 const searchRouter = express.Router();
 
-// Search by Title or Ingredients
-searchRouter.get("/search/by-title", findByTitle);
-module.exports = searchRouter;
+// Search by Title
+searchRouter.get("/search/by-title", authenticate, asyncHandler(findByTitle));
 
-searchRouter.get("/search/by-ingredient", findByIngredient);
+// Search by  Ingredients
+searchRouter.get(
+  "/search/by-ingredient",
+  authenticate,
+  asyncHandler(findByIngredient)
+);
+
 module.exports = searchRouter;

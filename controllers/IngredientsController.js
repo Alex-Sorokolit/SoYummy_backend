@@ -1,5 +1,4 @@
-const Ingredient = require("../models/ingredientsModels");
-const asyncHandler = require("express-async-handler");
+const Ingredient = require("../models/ingredient");
 
 class IngredientsController {
   async getIngredientsList(req, res) {
@@ -49,7 +48,4 @@ class IngredientsController {
 
 const ingredientCtrl = new IngredientsController();
 
-module.exports = {
-  getIngredientsList: asyncHandler(ingredientCtrl.getIngredientsList),
-  searchIngredient: asyncHandler(ingredientCtrl.searchIngredient),
-};
+module.exports = ingredientCtrl;

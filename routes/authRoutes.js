@@ -1,17 +1,20 @@
 //http://localhost:5000/api/v1/auth
 const express = require("express");
 const { schemas } = require("../models/user");
+const { ctrlWrapper } = require("../helpers");
 
 const {
-  register,
-  login,
-  getCurrent,
-  logout,
-  getCurrentUser,
-  updateUser,
-  updateAvatar,
-  subscription,
-  googleAuth,
+  authCtrl: {
+    register,
+    login,
+    getCurrent,
+    logout,
+    getCurrentUser,
+    updateUser,
+    updateAvatar,
+    subscription,
+    googleAuth,
+  },
 } = require("../controllers");
 
 const authRouter = express.Router();
@@ -25,54 +28,62 @@ const {
 
 // Route from front-end when press btn for google registration
 authRouter.get(
-  "/google",
+  "/auth/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
 //When you choice your account, google use callback on this rout
 authRouter.get(
-  "/google/callback",
+  "/auth/google/callback",
   passport.authenticate("google", { session: false }),
-  googleAuth
+  ctrlWrapper(googleAuth)
 );
 
 // Registration  (signup)
-authRouter.post("/register", validateBody(schemas.registerSchema), register);
+authRouter.post(
+  "/auth/register",
+  validateBody(schemas.registerSchema),
+  ctrlWrapper(register)
+);
 
 // LogIn (signin)
-authRouter.post("/login", validateBody(schemas.loginSchema), login);
+authRouter.post(
+  "/auth/login",
+  validateBody(schemas.loginSchema),
+  ctrlWrapper(login)
+);
 
 // Get current user
-authRouter.get("/current", authenticate, getCurrent);
+authRouter.get("/auth/current", authenticate, ctrlWrapper(getCurrent));
 
 // Get info about user
-authRouter.get("/user/info", authenticate, getCurrentUser);
+authRouter.get("/auth/user/info", authenticate, ctrlWrapper(getCurrentUser));
 
 // Update user fields
 authRouter.put(
-  "/user/update",
+  "/auth/user/update",
   authenticate,
   validateBody(schemas.updateUserSchema),
-  updateUser
+  ctrlWrapper(updateUser)
 );
 
 // LogOut
-authRouter.post("/logout", authenticate, logout);
+authRouter.post("/auth/logout", authenticate, ctrlWrapper(logout));
 
 // Update users avatar
 authRouter.patch(
-  "/user/avatar",
+  "/auth/user/avatar",
   authenticate,
   upload.single("avatar"),
-  updateAvatar
+  ctrlWrapper(updateAvatar)
 );
 
 // Subscription
 authRouter.post(
-  "/subscription",
+  "/auth/subscription",
   authenticate,
   validateBody(schemas.subscriptionSchema),
-  subscription
+  ctrlWrapper(subscription)
 );
 
 module.exports = authRouter;
