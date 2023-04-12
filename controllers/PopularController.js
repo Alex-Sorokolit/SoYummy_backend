@@ -1,4 +1,4 @@
-const { Recipe } = require("../models/recipeModels");
+const { Recipe } = require("../models/recipe");
 const asyncHandler = require("express-async-handler");
 
 class PopularController {

@@ -6,7 +6,7 @@ const {
   isValidId,
   imageUpload,
 } = require("../middlewares");
-const { schemas } = require("../models/recipeModels");
+const { schemas } = require("../models/recipe");
 const {
   addRecipe,
   removeRecipe,

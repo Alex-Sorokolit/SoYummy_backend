@@ -1,4 +1,4 @@
-const Ingredient = require("../models/ingredientsModels");
+const Ingredient = require("../models/ingredient");
 const asyncHandler = require("express-async-handler");
 
 class IngredientsController {

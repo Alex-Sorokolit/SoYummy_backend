@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 
-const { Recipe } = require("../models/recipeModels");
+const { Recipe } = require("../models/recipe");
 const { User } = require("../models/user");
 
 class FavoritesController {
@@ -13,7 +13,7 @@ class FavoritesController {
         message: "Missing recipe ID in request body",
       });
     }
-  
+
     const recipe = await Recipe.findById(recipeId);
     if (!recipe) {
       return res.status(404).json({
@@ -21,13 +21,13 @@ class FavoritesController {
         message: "Recipe not found",
       });
     }
-  
+
     // Оновлення списку улюблених рецептів користувача
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $addToSet: { favorites: recipeId } },
       { new: true, upsert: true }
-    )
+    );
     // Відправлення відповіді з останнім доданим рецептом
     res.status(201).json({
       code: 201,
@@ -36,7 +36,7 @@ class FavoritesController {
       data: recipe,
     });
   }
-  
+
   async getFavorites(req, res) {
     const { _id: userId } = req.user;
 

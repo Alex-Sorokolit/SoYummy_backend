@@ -1,9 +1,5 @@
-// const mongoose = require("mongoose");
-// const ObjectId = require("mongoose").Types.ObjectId;
-
 const asyncHandler = require("express-async-handler");
-
-const Ingredient = require("../models/ingredientsModels");
+const Ingredient = require("../models/ingredient");
 const { User } = require("../models/user");
 
 class ShoppingListController {

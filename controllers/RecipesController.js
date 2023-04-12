@@ -1,4 +1,4 @@
-const { Recipe } = require("../models/recipeModels");
+const { Recipe } = require("../models/recipe");
 const categories = require("../data/categories");
 const asyncHandler = require("express-async-handler"); // дозволяє відловлювати помилки (модний try catch)
 
