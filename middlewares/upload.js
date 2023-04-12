@@ -14,11 +14,16 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  folder: "Avatars",
-  allowedFormats: ["jpg", "png", "jpeg"],
+  params: {
+    folder: "avatars",
+    allowed_formats: ["jpg", "png", "jpeg"],
+    transformation: {
+      width: 100,
+      height: 100,
+    },
+  },
   filename: (req, file, cb) => {
     const { _id } = req.user;
-    // console.log(_id);
     cb(null, _id + "-" + file.originalname);
   },
 });
