@@ -16,7 +16,7 @@
 
 ### Посилання
 
-- [Live Page ](https://github.com/romaniv2511/so-yummy)
+- [Live Page ](https://romaniv2511.github.io/so-yummy/)
 - [FrontEnd ](https://github.com/romaniv2511/so-yummy)
 
 ### Запуск
