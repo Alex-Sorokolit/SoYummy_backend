@@ -2,10 +2,7 @@ const Ingredient = require("../models/ingredient");
 
 class IngredientsController {
   async getIngredientsList(req, res) {
-    const { page = 1, limit = 20 } = req.query;
-    const skip = (page - 1) * limit;
-
-    const result = await Ingredient.find().skip(skip).limit(limit);
+    const result = await Ingredient.find();
 
     if (!result) {
       res.status(400);
