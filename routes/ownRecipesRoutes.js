@@ -23,15 +23,6 @@ ownRecipesRouter.post(
   asyncHandler(addRecipe)
 );
 
-// Add image
-// "image" це поле у формі в яке передавати зображення
-ownRecipesRouter.patch(
-  "/own-recipes/upload",
-  authenticate,
-  imageUpload.single("image"),
-  asyncHandler(addImage)
-);
-
 // Remove own recipe
 ownRecipesRouter.delete(
   "/own-recipes/:id",

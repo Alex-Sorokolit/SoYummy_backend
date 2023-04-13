@@ -19,10 +19,9 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: (req, file) => {
     const timestamp = Math.floor(Date.now() / 1000);
-    console.log("userId: ", req.user);
     const { _id } = req.user;
     const imageName = `${_id}_${timestamp}`;
-    console.log(imageName);
+
     return {
       folder: "recipes",
       public_id: imageName,

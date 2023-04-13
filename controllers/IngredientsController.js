@@ -19,9 +19,7 @@ class IngredientsController {
   async searchIngredient(req, res) {
     // дай мені page сторінку якщо на сторінці limit об'єктів
     const { query = "", page = 1, limit = 20 } = req.query;
-    console.log(req.query);
     const skip = (page - 1) * limit;
-    console.log(query);
 
     const result = await Ingredient.find({
       ttl: { $regex: new RegExp(query, "i") },

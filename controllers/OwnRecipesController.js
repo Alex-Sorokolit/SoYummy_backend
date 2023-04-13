@@ -1,4 +1,6 @@
 const { Recipe } = require("../models/recipe");
+const cloudinary = require("cloudinary").v2;
+const { imageUpload } = require("../middlewares");
 
 class OwnRecipesController {
   // Add ownRecipe
@@ -18,7 +20,6 @@ class OwnRecipesController {
     }
 
     // дістаємо id із об'єкта запиту і перейменовуємо в owner
-    console.log("owner", req.user);
     const { _id: owner } = req.user;
 
     // Перевіряємо чи є посилання на зображення
@@ -27,11 +28,19 @@ class OwnRecipesController {
       throw new Error("Controller: Image require");
     }
     const { path: filePath } = req.file;
-    console.log(filePath);
 
+    // console.log(req.file.filename);
+    const position = req.file.filename.indexOf("/") + 1;
+    const fileName = req.file.filename.slice(
+      position,
+      req.file.filename.length
+    );
+
+    console.log("fileName: ", fileName);
     const newRecipe = await Recipe.create({
       ...req.body,
       thumb: filePath,
+      imageId: fileName,
       owner,
     });
 
@@ -44,19 +53,6 @@ class OwnRecipesController {
       message: "success",
       data: newRecipe,
     });
-  }
-  // Add Image
-  async addImage(req, res) {
-    // if (!req.file) {
-    //   res.status(400);
-    //   throw new Error("Controller: Image require");
-    // }
-    // const { path: filePath } = req.file;
-    // res.status(201).json({
-    //   code: 201,
-    //   message: "success",
-    //   data: filePath,
-    // });
   }
 
   // Remove ownRecipe
@@ -81,9 +77,20 @@ class OwnRecipesController {
       res.status(400);
       throw new Error("Controller: Recipe not found");
     }
+    console.log(result);
+    // Видалення зображення з Cloudinary
+    if (result.thumb && result.imageId) {
+      console.log("image", result.thumb);
+      // const publicId = result.thumb.public_id;
+      const publicId = result.imageId;
+      await cloudinary.uploader.destroy(publicId);
+    }
 
     //  видалити рецепт
-    const deletedRecipe = await Recipe.findByIdAndRemove(recipeId);
+    const deletedRecipe = await Recipe.findByIdAndRemove(recipeId, {
+      invalidate: true,
+      resource_type: "image",
+    });
 
     if (!deletedRecipe) {
       res.status(400);
@@ -122,23 +129,3 @@ class OwnRecipesController {
 const ownRecipeCtrl = new OwnRecipesController();
 
 module.exports = ownRecipeCtrl;
-
-// {
-//   "title": "Custom Recipe",
-//   "category": "Beef",
-//   "description": "ingredient bad id",
-//   "instructions": "instruction is required",
-//   "thumb": "https://www.themealdb.com/images/media/meals/sxxpst1468569714.jpg",
-//   "preview": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560408/kknfjaqupiqhufj5kspx.jpg",
-//   "time": "160",
-//   "ingredients": [
-//     {
-//       "_id": "640c2dd963a319ea671e3796",
-//       "measure": "300g soaked overnight in water"
-//     },
-//     {
-//       "_id": "640c2dd963a319ea671e370c",
-//       "measure": "2kg cut into 3cm cubes"
-//     }
-//   ]
-// }
