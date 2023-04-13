@@ -17,10 +17,18 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
-    folder: "recipes",
-    allowed_formats: ["jpg", "jpeg", "png"],
-    transformation: [{ width: 700, height: 700, crop: "fill" }],
+  params: (req, file) => {
+    const timestamp = Math.floor(Date.now() / 1000);
+    console.log("userId: ", req.user);
+    const { _id } = req.user;
+    const imageName = `${_id}_${timestamp}`;
+    console.log(imageName);
+    return {
+      folder: "recipes",
+      public_id: imageName,
+      allowed_formats: ["jpg", "jpeg", "png"],
+      transformation: [{ width: 700, height: 700, crop: "fill" }],
+    };
   },
 });
 

@@ -17,8 +17,9 @@ const ownRecipesRouter = express.Router();
 // Add own recipe
 ownRecipesRouter.post(
   "/own-recipes",
-  validateBody(schemas.recipeJoiSchema),
   authenticate,
+  imageUpload.single("image"),
+  validateBody(schemas.recipeJoiSchema),
   asyncHandler(addRecipe)
 );
 

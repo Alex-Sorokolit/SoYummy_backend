@@ -18,8 +18,22 @@ class OwnRecipesController {
     }
 
     // дістаємо id із об'єкта запиту і перейменовуємо в owner
+    console.log("owner", req.user);
     const { _id: owner } = req.user;
-    const newRecipe = await Recipe.create({ ...req.body, owner });
+
+    // Перевіряємо чи є посилання на зображення
+    if (!req.file) {
+      res.status(400);
+      throw new Error("Controller: Image require");
+    }
+    const { path: filePath } = req.file;
+    console.log(filePath);
+
+    const newRecipe = await Recipe.create({
+      ...req.body,
+      thumb: filePath,
+      owner,
+    });
 
     if (!newRecipe) {
       res.status(500);
@@ -33,17 +47,16 @@ class OwnRecipesController {
   }
   // Add Image
   async addImage(req, res) {
-    if (!req.file) {
-      res.status(400);
-      throw new Error("Controller: Image require");
-    }
-    const { path: filePath } = req.file;
-
-    res.status(201).json({
-      code: 201,
-      message: "success",
-      data: filePath,
-    });
+    // if (!req.file) {
+    //   res.status(400);
+    //   throw new Error("Controller: Image require");
+    // }
+    // const { path: filePath } = req.file;
+    // res.status(201).json({
+    //   code: 201,
+    //   message: "success",
+    //   data: filePath,
+    // });
   }
 
   // Remove ownRecipe
@@ -109,3 +122,23 @@ class OwnRecipesController {
 const ownRecipeCtrl = new OwnRecipesController();
 
 module.exports = ownRecipeCtrl;
+
+// {
+//   "title": "Custom Recipe",
+//   "category": "Beef",
+//   "description": "ingredient bad id",
+//   "instructions": "instruction is required",
+//   "thumb": "https://www.themealdb.com/images/media/meals/sxxpst1468569714.jpg",
+//   "preview": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560408/kknfjaqupiqhufj5kspx.jpg",
+//   "time": "160",
+//   "ingredients": [
+//     {
+//       "_id": "640c2dd963a319ea671e3796",
+//       "measure": "300g soaked overnight in water"
+//     },
+//     {
+//       "_id": "640c2dd963a319ea671e370c",
+//       "measure": "2kg cut into 3cm cubes"
+//     }
+//   ]
+// }
