@@ -21,7 +21,6 @@ const authRouter = express.Router();
 const {
   validateBody,
   authenticate,
-  // upload,
   passport,
   uploadCloud,
 } = require("../middlewares");
@@ -86,7 +85,6 @@ authRouter.post("/auth/logout", authenticate, ctrlWrapper(logout));
 authRouter.patch(
   "/auth/user/avatar",
   authenticate,
-  // upload.single("avatar"),
   uploadCloud(cloudOptions),
   ctrlWrapper(updateAvatar)
 );

@@ -29,7 +29,6 @@ const ownRecipesRouter = express.Router();
 ownRecipesRouter.post(
   "/own-recipes",
   authenticate,
-  // imageUpload.single("image"),
   uploadCloud(cloudOptions),
   validateBody(schemas.recipeJoiSchema),
   asyncHandler(addRecipe)

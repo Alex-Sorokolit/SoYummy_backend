@@ -3,7 +3,6 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 
 // Configuration
-
 require("dotenv").config();
 
 const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
