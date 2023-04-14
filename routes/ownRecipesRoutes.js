@@ -1,4 +1,3 @@
-//http://localhost:5000/api/v1/ownrecipes
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 const { schemas } = require("../models/recipe");

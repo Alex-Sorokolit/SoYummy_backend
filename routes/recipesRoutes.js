@@ -1,4 +1,3 @@
-//http://localhost:5000/api/v1/recipes
 const express = require("express");
 const asyncHandler = require("express-async-handler"); // дозволяє відловлювати помилки (модний try catch)
 const { authenticate, isValidId } = require("../middlewares");

@@ -1,4 +1,3 @@
-//http://localhost:5000/api/v1/auth
 const express = require("express");
 const { schemas } = require("../models/user");
 const { ctrlWrapper } = require("../helpers");
