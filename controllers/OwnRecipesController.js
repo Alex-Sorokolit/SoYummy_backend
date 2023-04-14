@@ -22,21 +22,15 @@ class OwnRecipesController {
     // дістаємо id із об'єкта запиту і перейменовуємо в owner
     const { _id: owner } = req.user;
 
-    // Перевіряємо чи є посилання на зображення
+    // Перевіряємо чи є зображення
     if (!req.file) {
       res.status(400);
       throw new Error("Controller: Image require");
     }
     const { path: filePath } = req.file;
 
-    // console.log(req.file.filename);
-    const position = req.file.filename.indexOf("/") + 1;
-    const fileName = req.file.filename.slice(
-      position,
-      req.file.filename.length
-    );
+    const fileName = req.file.filename;
 
-    console.log("fileName: ", fileName);
     const newRecipe = await Recipe.create({
       ...req.body,
       thumb: filePath,
@@ -77,11 +71,9 @@ class OwnRecipesController {
       res.status(400);
       throw new Error("Controller: Recipe not found");
     }
-    console.log(result);
+
     // Видалення зображення з Cloudinary
     if (result.thumb && result.imageId) {
-      console.log("image", result.thumb);
-      // const publicId = result.thumb.public_id;
       const publicId = result.imageId;
       await cloudinary.uploader.destroy(publicId);
     }
