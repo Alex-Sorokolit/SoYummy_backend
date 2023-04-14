@@ -5,11 +5,23 @@ const {
   validateBody,
   authenticate,
   isValidId,
-  imageUpload,
+  uploadCloud,
 } = require("../middlewares");
 const {
   ownRecipeCtrl: { addRecipe, removeRecipe, getAllOwnRecipes, addImage },
 } = require("../controllers");
+
+const cloudOptions = {
+  fieldname: "image",
+  destFolder: "recipes",
+  transformation: {
+    width: 700,
+    height: 700,
+    crop: "fill",
+    gravity: "auto",
+    zoom: 0.75,
+  },
+};
 
 const ownRecipesRouter = express.Router();
 
@@ -17,7 +29,8 @@ const ownRecipesRouter = express.Router();
 ownRecipesRouter.post(
   "/own-recipes",
   authenticate,
-  imageUpload.single("image"),
+  // imageUpload.single("image"),
+  uploadCloud(cloudOptions),
   validateBody(schemas.recipeJoiSchema),
   asyncHandler(addRecipe)
 );
