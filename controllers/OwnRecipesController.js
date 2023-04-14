@@ -1,6 +1,5 @@
 const { Recipe } = require("../models/recipe");
 const cloudinary = require("cloudinary").v2;
-const { imageUpload } = require("../middlewares");
 
 class OwnRecipesController {
   // Add ownRecipe
