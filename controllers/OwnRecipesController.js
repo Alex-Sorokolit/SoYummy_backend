@@ -1,4 +1,5 @@
 const { Recipe } = require("../models/recipe");
+const cloudinary = require("cloudinary").v2;
 
 class OwnRecipesController {
   // Add ownRecipe
@@ -19,7 +20,22 @@ class OwnRecipesController {
 
     // дістаємо id із об'єкта запиту і перейменовуємо в owner
     const { _id: owner } = req.user;
-    const newRecipe = await Recipe.create({ ...req.body, owner });
+
+    // Перевіряємо чи є зображення
+    if (!req.file) {
+      res.status(400);
+      throw new Error("Controller: Image require");
+    }
+    const { path: filePath } = req.file;
+
+    const fileName = req.file.filename;
+
+    const newRecipe = await Recipe.create({
+      ...req.body,
+      thumb: filePath,
+      imageId: fileName,
+      owner,
+    });
 
     if (!newRecipe) {
       res.status(500);
@@ -29,20 +45,6 @@ class OwnRecipesController {
       code: 201,
       message: "success",
       data: newRecipe,
-    });
-  }
-  // Add Image
-  async addImage(req, res) {
-    if (!req.file) {
-      res.status(400);
-      throw new Error("Controller: Image require");
-    }
-    const { path: filePath } = req.file;
-
-    res.status(201).json({
-      code: 201,
-      message: "success",
-      data: filePath,
     });
   }
 
@@ -69,8 +71,17 @@ class OwnRecipesController {
       throw new Error("Controller: Recipe not found");
     }
 
+    // Видалення зображення з Cloudinary
+    if (result.thumb && result.imageId) {
+      const publicId = result.imageId;
+      await cloudinary.uploader.destroy(publicId);
+    }
+
     //  видалити рецепт
-    const deletedRecipe = await Recipe.findByIdAndRemove(recipeId);
+    const deletedRecipe = await Recipe.findByIdAndRemove(recipeId, {
+      invalidate: true,
+      resource_type: "image",
+    });
 
     if (!deletedRecipe) {
       res.status(400);

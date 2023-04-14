@@ -1,4 +1,3 @@
-//http://localhost:5000/api/v1/auth
 const express = require("express");
 const { schemas } = require("../models/user");
 const { ctrlWrapper } = require("../helpers");
@@ -22,9 +21,21 @@ const authRouter = express.Router();
 const {
   validateBody,
   authenticate,
-  upload,
   passport,
+  uploadCloud,
 } = require("../middlewares");
+
+const cloudOptions = {
+  fieldname: "avatar",
+  destFolder: "avatars",
+  transformation: {
+    width: 100,
+    height: 100,
+    crop: "thumb",
+    gravity: "auto",
+    zoom: 0.75,
+  },
+};
 
 // Route from front-end when press btn for google registration
 authRouter.get(
@@ -74,7 +85,7 @@ authRouter.post("/auth/logout", authenticate, ctrlWrapper(logout));
 authRouter.patch(
   "/auth/user/avatar",
   authenticate,
-  upload.single("avatar"),
+  uploadCloud(cloudOptions),
   ctrlWrapper(updateAvatar)
 );
 

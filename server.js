@@ -48,7 +48,7 @@ app.use("*", (req, res, next) => {
 
 // відловлювач всіх не передбачених помилок
 app.use((error, req, res, next) => {
-  if (error) {
+  if (error.status) {
     const statusCode = error.status;
     res
       .status(statusCode)

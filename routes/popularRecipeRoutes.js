@@ -1,4 +1,3 @@
-//http://localhost:5000/api/v1/popular-recipe
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 const { authenticate } = require("../middlewares");

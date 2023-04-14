@@ -1,4 +1,3 @@
-//http://localhost:5000/api/v1/ownrecipes
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 const { schemas } = require("../models/recipe");
@@ -6,29 +5,33 @@ const {
   validateBody,
   authenticate,
   isValidId,
-  imageUpload,
+  uploadCloud,
 } = require("../middlewares");
 const {
   ownRecipeCtrl: { addRecipe, removeRecipe, getAllOwnRecipes, addImage },
 } = require("../controllers");
+
+const cloudOptions = {
+  fieldname: "image",
+  destFolder: "recipes",
+  transformation: {
+    width: 700,
+    height: 700,
+    crop: "fill",
+    gravity: "auto",
+    zoom: 0.75,
+  },
+};
 
 const ownRecipesRouter = express.Router();
 
 // Add own recipe
 ownRecipesRouter.post(
   "/own-recipes",
+  authenticate,
+  uploadCloud(cloudOptions),
   validateBody(schemas.recipeJoiSchema),
-  authenticate,
   asyncHandler(addRecipe)
-);
-
-// Add image
-// "image" це поле у формі в яке передавати зображення
-ownRecipesRouter.patch(
-  "/own-recipes/upload",
-  authenticate,
-  imageUpload.single("image"),
-  asyncHandler(addImage)
 );
 
 // Remove own recipe

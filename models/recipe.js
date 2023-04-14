@@ -62,10 +62,11 @@ const recipeSchema = Schema(
       type: String,
       // required: true,
     },
-    preview: {
+    imageId: {
       type: String,
       // required: true,
     },
+
     owner: { type: Schema.Types.ObjectId, ref: "user", required: true }, // тут буде зберігатися id користувача який додав контакт у базу, ref це колекція
   },
   { versionKey: false, timestamps: true }
