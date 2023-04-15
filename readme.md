@@ -12,7 +12,7 @@
 - Реалізована реєстрація з допомогою Google
 - Паролі хешуються
 
-![Схема додатку](./assets/SoYummy_Backend.webp)
+![Схема додатку](./assets/SoYummy_Backend_schema.webp)
 
 ### Посилання
 
